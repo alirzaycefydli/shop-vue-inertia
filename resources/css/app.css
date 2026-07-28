@@ -1,0 +1,85 @@
+@import 'tailwindcss';
+@import "@nuxt/ui";
+
+@source '../js/**/*.{vue,js,ts}';
+@source '../views/**/*.blade.php';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+:root {
+    --ui-primary: #7c3aed;
+    --ui-secondary: #2563eb;
+    --ui-success: #059669;
+    --ui-info: #0891b2;
+    --ui-warning: #d97706;
+    --ui-error: #dc2626;
+
+    --ui-text: #0f172a;
+    --ui-text-muted: #64748b;
+    --ui-text-dimmed: #94a3b8;
+    --ui-text-highlighted: #020617;
+    --ui-text-inverted: #ffffff;
+
+    --ui-bg: #ffffff;
+    --ui-bg-muted: #f8fafc;
+    --ui-bg-elevated: #ffffff;
+    --ui-bg-accented: #f1f5f9;
+    --ui-bg-inverted: #020617;
+
+    --ui-border: #e2e8f0;
+    --ui-border-muted: #f1f5f9;
+    --ui-border-accented: #cbd5e1;
+    --ui-border-inverted: #020617;
+
+    --ui-radius: 1rem;
+}
+
+.dark {
+    --ui-primary: #a78bfa;
+    --ui-secondary: #60a5fa;
+    --ui-success: #34d399;
+    --ui-info: #22d3ee;
+    --ui-warning: #fbbf24;
+    --ui-error: #f87171;
+
+    --ui-text: #e2e8f0;
+    --ui-text-muted: #94a3b8;
+    --ui-text-dimmed: #64748b;
+    --ui-text-highlighted: #ffffff;
+    --ui-text-inverted: #020617;
+
+    --ui-bg: #020617;
+    --ui-bg-muted: #0f172a;
+    --ui-bg-elevated: #111827;
+    --ui-bg-accented: #1e293b;
+    --ui-bg-inverted: #ffffff;
+
+    --ui-border: #1e293b;
+    --ui-border-muted: #0f172a;
+    --ui-border-accented: #334155;
+    --ui-border-inverted: #ffffff;
+}
+
+html {
+    color-scheme: light;
+}
+
+html.dark {
+    color-scheme: dark;
+}
+
+body {
+    background: var(--ui-bg-muted);
+    color: var(--ui-text);
+}
+
+html.dark body {
+    background: var(--ui-bg);
+}
