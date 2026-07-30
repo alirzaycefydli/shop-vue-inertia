@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Database\Seeder;
+use RuntimeException;
 
 final class ProductSeeder extends Seeder
 {
@@ -19,6 +20,15 @@ final class ProductSeeder extends Seeder
         $catalog = require database_path('seeders/Data/catalog.php');
 
         foreach ($catalog['products'] as $data) {
+            $productCategories = Category::whereIn(
+                'slug',
+                $data['categories']
+            )->get();
+
+            $primaryCategory = $productCategories
+                ->sortByDesc(fn(Category $category) => $this->categoryDepth($category))
+                ->first();
+
             $product = Product::create([
                 'name' => $data['name'],
                 'slug' => $data['slug'],
@@ -27,18 +37,13 @@ final class ProductSeeder extends Seeder
                 'price' => $data['price'],
                 'stock_quantity' => $data['stock_quantity'],
                 'status' => $data['status'],
+                'primary_category_id' => $primaryCategory->id,
             ]);
 
-            // category_product pivot
-            $categories = Category::whereIn(
-                'slug',
-                $data['categories']
-            )->get();
+            $product->categories()->attach(
+                $productCategories
+            );
 
-            $product->categories()->attach($categories);
-
-
-            // product_images table
             foreach ($data['images'] as $image) {
                 ProductImage::create([
                     'product_id' => $product->id,
@@ -47,5 +52,17 @@ final class ProductSeeder extends Seeder
                 ]);
             }
         }
+    }
+
+    private function categoryDepth(Category $category): int
+    {
+        $depth = 0;
+
+        while ($category->parent_id) {
+            $depth++;
+            $category = $category->parent;
+        }
+
+        return $depth;
     }
 }

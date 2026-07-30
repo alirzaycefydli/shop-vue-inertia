@@ -29,30 +29,13 @@ final class ProductFactory extends Factory
             'price' => fake()->randomFloat(2, 10, 1000),
             'stock_quantity' => fake()->numberBetween(0, 100),
             'status' => fake()->randomElement(ProductStatus::cases()),
-            'primary_category_id' => null,
-            'detailed_description' => fake()->paragraphs(5, true)
+            'primary_category_id' => Category::factory(),
+            'detailed_description' => fake()->paragraphs(5, true),
         ];
     }
 
     /**
-     * Define the model's primary category state.
-     *
-     * @return ProductFactory|Factory
-     */
-    public function withPrimaryCategory(): ProductFactory|Factory
-    {
-        return $this->state(function () {
-            return [
-                'primary_category_id' => Category::factory(),
-            ];
-        });
-    }
-
-    /**
      * Define the model's image state.'
-     *
-     * @param int $count
-     * @return ProductFactory|Factory
      */
     public function withImages(int $count = 3): ProductFactory|Factory
     {
@@ -65,6 +48,15 @@ final class ProductFactory extends Factory
                 ->create([
                     'product_id' => $product->id,
                 ]);
+        });
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Product $product) {
+            $product->categories()->attach(
+                $product->primary_category_id
+            );
         });
     }
 }

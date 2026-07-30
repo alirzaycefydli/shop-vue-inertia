@@ -39,6 +39,10 @@ return [
                     'name' => 'Accessories',
                     'slug' => 'electronics-accessories',
                 ],
+                [
+                    'name'=>'Gaming Consoles',
+                    'slug'=>'gaming-consoles'
+                ]
             ],
         ],
 
@@ -98,7 +102,35 @@ return [
 
             'images' => [
                 [
-                    'image_url' => '/images/products/macbook-pro-14.jpg',
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 0,
+                ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 1,
+                ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 2,
+                ],
+            ],
+        ],
+        [
+            'name' => 'MacBook Air 12',
+            'slug' => 'macbook-air-12',
+            'description' => 'Professional laptop with powerful performance.',
+            'detailed_description' => 'Apple MacBook Air with high resolution display and powerful processor.',
+            'price' => 999.99,
+            'stock_quantity' => 15,
+            'status' => ProductStatus::Draft->value,
+
+            'categories' => [
+                'laptops',
+            ],
+
+            'images' => [
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
                     'position' => 0,
                 ],
             ],
@@ -122,6 +154,22 @@ return [
                     'image_url' => 'https://picsum.photos/200/300',
                     'position' => 0,
                 ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 1,
+                ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 2,
+                ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 3,
+                ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 4,
+                ],
             ],
         ],
 
@@ -144,6 +192,14 @@ return [
                     'image_url' => 'https://picsum.photos/200/300',
                     'position' => 0,
                 ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 1,
+                ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 2,
+                ],
             ],
         ],
 
@@ -164,6 +220,14 @@ return [
                 [
                     'image_url' => 'https://picsum.photos/200/300',
                     'position' => 0,
+                ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 1,
+                ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 2,
                 ],
             ],
         ],
@@ -187,6 +251,10 @@ return [
                     'image_url' => 'https://picsum.photos/200/300',
                     'position' => 0,
                 ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 1,
+                ],
             ],
         ],
 
@@ -207,6 +275,14 @@ return [
                 [
                     'image_url' => 'https://picsum.photos/200/300',
                     'position' => 0,
+                ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 1,
+                ],
+                [
+                    'image_url' => 'https://picsum.photos/200/300',
+                    'position' => 2,
                 ],
             ],
         ],

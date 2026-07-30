@@ -28,8 +28,6 @@ final class CategoryFactory extends Factory
 
     /**
      * Define the model's children state.
-     *
-     * @return CategoryFactory|Factory
      */
     public function withParent(): CategoryFactory|Factory
     {

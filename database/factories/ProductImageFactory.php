@@ -22,7 +22,7 @@ final class ProductImageFactory extends Factory
     {
         return [
             'product_id' => Product::factory(),
-            'image_url' => 'https://picsum.photos/800/800?random=' . fake()->numberBetween(1, 10000),
+            'image_url' => 'https://picsum.photos/800/800?random='.fake()->numberBetween(1, 10000),
             'position' => fake()->numberBetween(0, 5),
         ];
     }

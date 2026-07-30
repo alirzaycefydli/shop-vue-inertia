@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\ProductStatus;
+use App\Models\Scopes\ActiveProductScope;
+use App\Models\Scopes\StockProductScope;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
+#[ScopedBy([ActiveProductScope::class, StockProductScope::class])]
 #[Fillable(['name', 'slug', 'description', 'detailed_description', 'price', 'stock_quantity', 'status', 'primary_category_id'])]
 final class Product extends Model
 {
@@ -72,6 +78,11 @@ final class Product extends Model
         });
     }
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

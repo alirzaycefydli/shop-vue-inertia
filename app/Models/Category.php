@@ -36,6 +36,14 @@ final class Category extends Model
     }
 
     /**
+     * @return HasMany<Category, $this>
+     */
+    public function children(): HasMany
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    /**
      * @return BelongsTo<Category, $this>
      */
     public function parentRecursive(): BelongsTo
@@ -46,8 +54,31 @@ final class Category extends Model
     /**
      * @return HasMany<Category, $this>
      */
-    public function children(): HasMany
+    public function childrenRecursive(): HasMany
     {
-        return $this->hasMany(Category::class, 'parent_id');
+        return $this->children()->with('childrenRecursive');
+    }
+
+    /**
+     * Returning a reversed array that contains the tree of parent-child recursive category list
+     *
+     * @return array
+     */
+    public function breadcrumbs(): array
+    {
+        $categories = collect();
+
+        $category = $this;
+
+        while ($category) {
+            $categories->prepend([
+                'name' => $category->name,
+                'slug' => $category->slug,
+            ]);
+
+            $category = $category->parent;
+        }
+
+        return $categories->values()->all();
     }
 }

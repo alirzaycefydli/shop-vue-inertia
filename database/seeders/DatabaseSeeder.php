@@ -26,26 +26,26 @@ final class DatabaseSeeder extends Seeder
               'email' => 'test@example.com',
           ]);*/
 
-/*        $categories = Category::factory(5)->create();
+        /*        $categories = Category::factory(5)->create();
 
-        Category::factory(5)
-            ->withParent()
-            ->create();
+                Category::factory(5)
+                    ->withParent()
+                    ->create();
 
-        Product::factory(10)
-            ->withImages(3)
-            ->create()
-            ->each(function (Product $product) use ($categories) {
-                $category = $categories->random();
+                Product::factory(10)
+                    ->withImages(3)
+                    ->create()
+                    ->each(function (Product $product) use ($categories) {
+                        $category = $categories->random();
 
-                $product->update([
-                    'primary_category_id' => $category->id,
-                ]);
+                        $product->update([
+                            'primary_category_id' => $category->id,
+                        ]);
 
-                $product->categories()->sync([
-                    $category->id,
-                ]);
-            });*/
+                        $product->categories()->sync([
+                            $category->id,
+                        ]);
+                    });*/
 
         $this->call([
             CategorySeeder::class,
