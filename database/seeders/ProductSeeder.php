@@ -8,7 +8,6 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Database\Seeder;
-use RuntimeException;
 
 final class ProductSeeder extends Seeder
 {
@@ -26,7 +25,7 @@ final class ProductSeeder extends Seeder
             )->get();
 
             $primaryCategory = $productCategories
-                ->sortByDesc(fn(Category $category) => $this->categoryDepth($category))
+                ->sortByDesc(fn (Category $category) => $this->categoryDepth($category))
                 ->first();
 
             $product = Product::create([

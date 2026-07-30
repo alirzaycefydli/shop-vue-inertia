@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 final class LatestProducts
 {
-
     /**
      * Handle the given product query and return the latest records.
      *

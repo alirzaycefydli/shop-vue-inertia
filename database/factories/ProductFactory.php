@@ -42,7 +42,7 @@ final class ProductFactory extends Factory
         return $this->afterCreating(function (Product $product) use ($count) {
             ProductImage::factory()
                 ->count($count)
-                ->sequence(fn($sequence) => [
+                ->sequence(fn ($sequence) => [
                     'position' => $sequence->index,
                 ])
                 ->create([

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductCardResource extends JsonResource
+final class ProductCardResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,7 +25,7 @@ class ProductCardResource extends JsonResource
             }),
             'category' => $this->whenLoaded('primaryCategory', function () {
                 return $this->primaryCategory->name;
-            })
+            }),
         ];
     }
 }

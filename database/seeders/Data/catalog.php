@@ -40,9 +40,9 @@ return [
                     'slug' => 'electronics-accessories',
                 ],
                 [
-                    'name'=>'Gaming Consoles',
-                    'slug'=>'gaming-consoles'
-                ]
+                    'name' => 'Gaming Consoles',
+                    'slug' => 'gaming-consoles',
+                ],
             ],
         ],
 

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductDetailResource extends JsonResource
+final class ProductDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -28,7 +30,7 @@ class ProductDetailResource extends JsonResource
             ),
             'category_breadcrumbs' => $this->whenLoaded(
                 'categories',
-                fn() => $this->categories->first()?->breadcrumbs()
+                fn () => $this->categories->first()?->breadcrumbs()
             ),
             'description' => $this->description,
             'stock_quantity' => $this->stock_quantity,
