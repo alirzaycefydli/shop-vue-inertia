@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, watch} from 'vue';
+import {reactive, watch, watchEffect} from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import ProductCard from "../../Components/UI/ProductCard.vue";
 import {router} from "@inertiajs/vue3";
@@ -12,28 +12,60 @@ const props = defineProps({
     sortOptions: {
         type: Array,
         required: true,
+    },
+    search: {
+        type: String,
+        default: ''
+    },
+    sort: {
+        type: String,
     }
 })
+
 const query = reactive({
     page: props.products.meta.current_page,
-    sort: 'newest',
-    //search: '',
+    sort: props.sort,
 })
-
-watch(() => query.page, reload)
-watch(() => query.sort, reload)
-
-function reload() {
+//console.log()
+const reload = () => {
     router.get(route('products.index'), query, {
         preserveState: true,
         preserveScroll: true,
         replace: true,
     })
 }
+
+watch(
+    () => [query.page, query.sort],
+    reload
+)
+
+watch(
+    () => props.search,
+    (search) => {
+        query.search = search
+    }
+)
+
+watch(
+    () => props.sort,
+    (sort) => {
+        query.sort = sort
+    }
+)
+
+watch(
+    () => props.products.meta.current_page,
+    (page) => {
+        query.page = page;
+    }
+)
+
 </script>
 
 <template>
-    <AppLayout title="Products">
+    <AppLayout title="Products"
+    >
         <div class="space-y-8">
             <section class="rounded-md border border-default bg-elevated p-6 shadow-sm sm:p-8">
                 <UBadge color="primary" variant="soft">
@@ -58,8 +90,8 @@ function reload() {
                         <USelect
                             v-model="query.sort"
                             :items="sortOptions"
-                            :value-key="sortOptions.value"
-                            :label-key="sortOptions.label"
+                            value-key="value"
+                            label-key="label"
                             class="w-full"
                         />
                     </div>

@@ -15,9 +15,9 @@ final class AllProducts
     {
         $query = Product::query();
 
-        // TODO:: Implement search functionality
         if ($filters->search) {
-            $query->where('name', 'like', "%{$filters->search}%");
+            $query->where('name', 'like', "%{$filters->search}%")
+            ->orWhere('description', 'like', "%{$filters->search}%");
         }
 
         if ($filters->sort) {

@@ -29,12 +29,13 @@ final class ProductController extends Controller
                     'value' => $sort->value,
                     'label' => $sort->label(),
                 ]),
+            'search' => $request->query('search'),
+            'sort' => $request->query('sort') ?? ProductSort::Newest,
         ]);
     }
 
     public function show(Product $product, SingleProduct $action)
     {
-        // return ProductDetailResource::make($action->handle($product));
         return Inertia::render('Products/Show', [
             'product' => ProductDetailResource::make($action->handle($product)),
         ]);
