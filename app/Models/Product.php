@@ -51,6 +51,9 @@ final class Product extends Model
         return $this->belongsToMany(Category::class);
     }
 
+    /**
+     * @return BelongsTo<Category, $this>
+     */
     public function primaryCategory(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'primary_category_id');

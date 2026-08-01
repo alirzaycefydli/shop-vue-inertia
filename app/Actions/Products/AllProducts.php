@@ -11,23 +11,26 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 final class AllProducts
 {
+    /**
+     * @return LengthAwarePaginator<int, Product>
+     */
     public function handle(ProductFilterData $filters): LengthAwarePaginator
     {
         $query = Product::query();
 
         if ($filters->search) {
             $query->where('name', 'like', "%{$filters->search}%")
-            ->orWhere('description', 'like', "%{$filters->search}%");
+                ->orWhere('description', 'like', "%{$filters->search}%");
         }
 
         if ($filters->sort) {
             match ($filters->sort) {
                 ProductSort::Newest => $query->latest(),
                 ProductSort::Oldest => $query->oldest(),
-                ProductSort::NameAscending => $query->orderBy('name', 'ASC'),
-                ProductSort::NameDescending => $query->orderBy('name', 'DESC'),
-                ProductSort::PriceHigh => $query->orderBy('price', 'DESC'),
-                ProductSort::PriceLow => $query->orderBy('price', 'ASC'),
+                ProductSort::NameAscending => $query->orderBy('name', 'asc'),
+                ProductSort::NameDescending => $query->orderBy('name', 'desc'),
+                ProductSort::PriceHigh => $query->orderBy('price', 'asc'),
+                ProductSort::PriceLow => $query->orderBy('price', 'desc'),
             };
         }
 

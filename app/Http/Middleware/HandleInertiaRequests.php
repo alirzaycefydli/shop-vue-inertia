@@ -38,7 +38,7 @@ final class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return [
-            'search' => fn() => $request->has('search') ? $request->search : '',
+            'search' => fn () => $request->has('search') ? $request->search : '',
         ];
     }
 }

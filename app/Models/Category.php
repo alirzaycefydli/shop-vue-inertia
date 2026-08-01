@@ -61,6 +61,8 @@ final class Category extends Model
 
     /**
      * Returning a reversed array that contains the tree of parent-child recursive category list
+     *
+     * return array
      */
     public function breadcrumbs(): array
     {

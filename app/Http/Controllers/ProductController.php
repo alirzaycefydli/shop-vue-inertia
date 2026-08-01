@@ -13,10 +13,11 @@ use App\Http\Resources\ProductDetailResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 final class ProductController extends Controller
 {
-    public function index(Request $request, AllProducts $action)
+    public function index(Request $request, AllProducts $action): Response
     {
         return Inertia::render('Products/Index', [
             'products' => ProductCardResource::collection(
@@ -34,7 +35,7 @@ final class ProductController extends Controller
         ]);
     }
 
-    public function show(Product $product, SingleProduct $action)
+    public function show(Product $product, SingleProduct $action): Response
     {
         return Inertia::render('Products/Show', [
             'product' => ProductDetailResource::make($action->handle($product)),

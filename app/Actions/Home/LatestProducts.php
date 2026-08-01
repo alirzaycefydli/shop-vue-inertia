@@ -12,7 +12,7 @@ final class LatestProducts
     /**
      * Handle the given product query and return the latest records.
      *
-     * @return Collection Collection of the latest product records.
+     * @return Collection<int, Product> Collection of the latest product records.
      */
     public function handle(): Collection
     {

@@ -36,6 +36,8 @@ final class ProductFactory extends Factory
 
     /**
      * Define the model's image state.'
+     *
+     * return ProductFactory|Factory
      */
     public function withImages(int $count = 3): ProductFactory|Factory
     {

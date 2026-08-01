@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, watch, watchEffect} from 'vue';
+import {reactive, watch} from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import ProductCard from "../../Components/UI/ProductCard.vue";
 import {router} from "@inertiajs/vue3";
@@ -26,7 +26,6 @@ const query = reactive({
     page: props.products.meta.current_page,
     sort: props.sort,
 })
-//console.log()
 const reload = () => {
     router.get(route('products.index'), query, {
         preserveState: true,
