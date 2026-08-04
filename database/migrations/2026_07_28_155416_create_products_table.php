@@ -23,7 +23,11 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->integer('stock_quantity')->default(0);
             $table->string('status')->default(ProductStatus::Draft->value);
-            $table->string('primary_category_id')->nullable();
+            $table->uuid('primary_category_id')->nullable();
+            $table->foreign('primary_category_id')
+                ->references('id')
+                ->on('categories')
+                ->nullOnDelete();
             $table->timestamps();
         });
     }

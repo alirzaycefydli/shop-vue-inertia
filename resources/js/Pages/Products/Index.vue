@@ -1,109 +1,65 @@
 <script setup>
-import { computed, ref } from 'vue';
+import {reactive, watch} from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import ProductCard from "../../Components/UI/ProductCard.vue";
+import {router} from "@inertiajs/vue3";
 
-const products = [
-    {
-        name: 'Structured Overshirt',
-        slug: 'structured-overshirt',
-        category: 'Men',
-        price: 128,
-        rating: 4.9,
-        description: 'A relaxed overshirt for everyday layering.',
+const props = defineProps({
+    products: {
+        type: Object,
+        required: true,
     },
-    {
-        name: 'Utility Chore Jacket',
-        slug: 'utility-chore-jacket',
-        category: 'Men',
-        price: 164,
-        rating: 4.7,
-        description: 'Durable outer layer with utility pockets.',
+    sortOptions: {
+        type: Array,
+        required: true,
     },
-    {
-        name: 'Relaxed Tailored Trouser',
-        slug: 'relaxed-tailored-trouser',
-        category: 'Women',
-        price: 142,
-        rating: 5.0,
-        description: 'Soft tailoring with a relaxed modern fit.',
+    search: {
+        type: String,
+        default: ''
     },
-    {
-        name: 'Ribbed Knit Cardigan',
-        slug: 'ribbed-knit-cardigan',
-        category: 'Women',
-        price: 118,
-        rating: 4.6,
-        description: 'Layer-ready knit with clean rib texture.',
-    },
-    {
-        name: 'Minimal Runner',
-        slug: 'minimal-runner',
-        category: 'Footwear',
-        price: 156,
-        rating: 4.9,
-        description: 'Lightweight sneaker with cushioned support.',
-    },
-    {
-        name: 'Suede Chelsea Boot',
-        slug: 'suede-chelsea-boot',
-        category: 'Footwear',
-        price: 212,
-        rating: 4.8,
-        description: 'Refined boot with everyday comfort.',
-    },
-    {
-        name: 'Everyday Leather Tote',
-        slug: 'everyday-leather-tote',
-        category: 'Accessories',
-        price: 184,
-        rating: 4.8,
-        description: 'Minimal tote for work and daily carry.',
-    },
-    {
-        name: 'Compact Card Wallet',
-        slug: 'compact-card-wallet',
-        category: 'Accessories',
-        price: 64,
-        rating: 4.5,
-        description: 'Slim wallet with practical organization.',
-    },
-];
+    sort: {
+        type: String,
+    }
+})
 
-const sortBy = ref('name-asc');
+const query = reactive({
+    page: props.products.meta.current_page,
+    sort: props.sort,
+})
+const reload = () => {
+    router.get(route('products.index'), query, {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true,
+    })
+}
 
-const sortOptions = [
-    { label: 'Name: A to Z', value: 'name-asc' },
-    { label: 'Name: Z to A', value: 'name-desc' },
-    { label: 'Price: Low to High', value: 'price-asc' },
-    { label: 'Price: High to Low', value: 'price-desc' },
-    { label: 'Rating: High to Low', value: 'rating-desc' },
-];
+watch(
+    () => [query.page, query.sort],
+    reload
+)
 
-const sortedProducts = computed(() => {
-    return [...products].sort((first, second) => {
-        if (sortBy.value === 'name-asc') {
-            return first.name.localeCompare(second.name);
-        }
+watch(
+    () => props.search,
+    (search) => {
+        query.search = search
+    }
+)
 
-        if (sortBy.value === 'name-desc') {
-            return second.name.localeCompare(first.name);
-        }
+watch(
+    () => props.sort,
+    (sort) => {
+        query.sort = sort
+    }
+)
 
-        if (sortBy.value === 'price-asc') {
-            return first.price - second.price;
-        }
+watch(
+    () => props.products.meta.current_page,
+    (page) => {
+        query.page = page;
+    }
+)
 
-        if (sortBy.value === 'price-desc') {
-            return second.price - first.price;
-        }
-
-        if (sortBy.value === 'rating-desc') {
-            return second.rating - first.rating;
-        }
-
-        return 0;
-    });
-});
 </script>
 
 <template>
@@ -113,24 +69,22 @@ const sortedProducts = computed(() => {
                 <UBadge color="primary" variant="soft">
                     Product catalog
                 </UBadge>
-
                 <div class="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
                         <h1 class="text-3xl font-semibold tracking-tight text-highlighted">
                             All products
                         </h1>
                         <p class="mt-2 max-w-2xl text-sm leading-6 text-muted">
-                            Browse the storefront catalog and sort products by name, price, or customer rating.
+                            Browse the storefront catalog and sort products by name, price, or date.
                         </p>
                     </div>
-
                     <div class="w-full lg:w-64">
                         <label class="mb-2 block text-sm font-medium text-highlighted">
                             Sort products
                         </label>
 
                         <USelect
-                            v-model="sortBy"
+                            v-model="query.sort"
                             :items="sortOptions"
                             value-key="value"
                             label-key="label"
@@ -139,16 +93,14 @@ const sortedProducts = computed(() => {
                     </div>
                 </div>
             </section>
-
-            <section class="space-y-4">
+            <section class="space-y-4" v-if="products.meta.total > 0">
                 <div class="flex items-center justify-between gap-4">
                     <p class="text-sm text-muted">
-                        Showing {{ sortedProducts.length }} products
+                        Showing {{ products.meta.to }} from {{ products.meta.total }} products
                     </p>
-
                     <UButton
                         as="Link"
-                        to="/categories"
+                        :to="route('categories.index')"
                         color="neutral"
                         variant="outline"
                         icon="i-lucide-list-filter"
@@ -158,51 +110,20 @@ const sortedProducts = computed(() => {
                 </div>
 
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    <Link
-                        v-for="product in sortedProducts"
-                        :key="product.slug"
-                        :href="`/products/${product.slug}`"
-                        class="group rounded-md border border-default bg-elevated p-5 shadow-sm transition hover:border-accented hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                    >
-                        <div class="flex aspect-4/5 items-center justify-center rounded-md bg-muted transition group-hover:bg-accented">
-                            <UIcon name="i-lucide-package" class="size-12 text-muted" />
-                        </div>
-
-                        <div class="mt-4 space-y-3">
-                            <div class="flex items-start justify-between gap-3">
-                                <div>
-                                    <UBadge color="primary" variant="soft" size="xs">
-                                        {{ product.category }}
-                                    </UBadge>
-
-                                    <h2 class="mt-2 text-sm font-semibold text-highlighted">
-                                        {{ product.name }}
-                                    </h2>
-                                </div>
-
-                                <div class="flex items-center gap-1 rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 dark:bg-amber-400/10 dark:text-amber-300">
-                                    <UIcon name="i-lucide-star" class="size-3 fill-current" />
-                                    {{ product.rating }}
-                                </div>
-                            </div>
-
-                            <p class="text-sm leading-6 text-muted">
-                                {{ product.description }}
-                            </p>
-
-                            <div class="flex items-center justify-between">
-                                <p class="text-base font-semibold text-highlighted">
-                                    ${{ product.price }}
-                                </p>
-
-                                <span class="inline-flex items-center gap-1 text-sm font-medium text-primary">
-                                    View
-                                    <UIcon name="i-lucide-arrow-right" class="size-4" />
-                                </span>
-                            </div>
-                        </div>
-                    </Link>
+                    <ProductCard
+                        v-for="product in products.data"
+                        :product="product"
+                    />
                 </div>
+                <UPagination
+                    v-model:page="query.page"
+                    :total="products.meta.total"
+                    :items-per-page="products.meta.per_page"
+                    :sibling-count="3"
+                />
+            </section>
+            <section v-else>
+                <p class="text-red-600">No products have been found!</p>
             </section>
         </div>
     </AppLayout>

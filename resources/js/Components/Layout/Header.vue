@@ -9,7 +9,7 @@ import Navigation from './Navigation.vue';
 import MobileMenu from './MobileMenu.vue';
 import ThemeToggle from '@/Layouts/ThemeToggle.vue';
 
-defineProps({
+const props = defineProps({
     categories: {
         type: Array,
         required: true,
@@ -38,12 +38,15 @@ const mobileMenuOpen = ref(false);
 <template>
     <header
         class="sticky top-0 z-100 border-b border-slate-200 bg-white/90 backdrop-blur transition-colors dark:border-slate-800 dark:bg-slate-950/90">
-        <div class="relative z-120 mx-auto max-w-7xl bg-white/90 px-4 backdrop-blur dark:bg-slate-950/90 sm:px-6 lg:px-8">
+        <div
+            class="relative z-120 mx-auto max-w-7xl bg-white/90 px-4 backdrop-blur dark:bg-slate-950/90 sm:px-6 lg:px-8">
             <div class="flex items-center gap-3 py-4 lg:gap-6 bg">
                 <Logo :href="route('home')"/>
 
                 <div class="hidden min-w-0 flex-1 lg:block">
-                    <SearchBar/>
+                    <SearchBar
+                        @search="$emit('search', $event)"
+                    />
                 </div>
 
                 <div class="ml-auto hidden items-center gap-2 lg:flex">

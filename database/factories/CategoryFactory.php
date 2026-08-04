@@ -20,7 +20,21 @@ final class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->words(2, true),
+            'slug' => fake()->slug(),
+            'parent_id' => null,
         ];
+    }
+
+    /**
+     * Define the model's children state.
+     */
+    public function withParent(): CategoryFactory|Factory
+    {
+        return $this->state(function () {
+            return [
+                'parent_id' => Category::factory(),
+            ];
+        });
     }
 }

@@ -1,42 +1,37 @@
 <script setup>
-import { computed } from 'vue';
+import {ref, watch} from "vue";
+import {usePage} from "@inertiajs/vue3";
 
 const props = defineProps({
-    modelValue: {
-        type: String,
-        default: '',
-    },
     placeholder: {
         type: String,
         default: 'Search products, brands, and categories',
     },
 });
 
-const emit = defineEmits(['update:modelValue', 'submit']);
+const emit = defineEmits(['search']);
 
-const query = computed({
-    get: () => props.modelValue,
-    set: (value) => emit('update:modelValue', value),
-});
+const page = usePage()
+
+const searchInput = ref(page.props.search ?? '')
+
+watch(
+    () => page.props.search,
+    (value) => {
+        searchInput.value = value ?? ''
+    }
+)
 
 const submit = () => {
-    emit('submit', query.value.trim());
-};
+    emit('search', searchInput.value.trim())
+}
+
 </script>
 
 <template>
-    <form
-        class="w-full"
-        action="/search"
-        method="get"
-        role="search"
-        @submit.prevent="submit"
-    >
-        <label class="sr-only" for="site-search">Search products</label>
-
         <UInput
             id="site-search"
-            v-model="query"
+            v-model="searchInput"
             type="search"
             name="q"
             autocomplete="off"
@@ -44,6 +39,7 @@ const submit = () => {
             size="xl"
             icon="i-lucide-search"
             class="w-full"
+            @keyup.enter="submit"
         >
             <template #trailing>
                 <UButton
@@ -52,10 +48,10 @@ const submit = () => {
                     variant="solid"
                     size="sm"
                     aria-label="Search"
+                    @click="submit"
                 >
                     Search
                 </UButton>
             </template>
         </UInput>
-    </form>
 </template>
