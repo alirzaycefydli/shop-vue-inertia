@@ -6,7 +6,7 @@ namespace App\Actions\Products;
 
 use App\Models\Product;
 
-final class SingleProduct
+final readonly class SingleProduct
 {
     public function handle(Product $product): Product
     {

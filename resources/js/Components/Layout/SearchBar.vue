@@ -23,35 +23,35 @@ watch(
 )
 
 const submit = () => {
-    emit('search', searchInput.value.trim());
+    emit('search', searchInput.value.trim())
 }
 
 </script>
 
 <template>
-    <UInput
-        id="site-search"
-        v-model="searchInput"
-        type="search"
-        name="q"
-        autocomplete="off"
-        :placeholder="placeholder"
-        size="xl"
-        icon="i-lucide-search"
-        class="w-full"
-        @keyup.enter="submit"
-    >
-        <template #trailing>
-            <UButton
-                type="submit"
-                color="primary"
-                variant="solid"
-                size="sm"
-                aria-label="Search"
-                @click="submit"
-            >
-                Search
-            </UButton>
-        </template>
-    </UInput>
+        <UInput
+            id="site-search"
+            v-model="searchInput"
+            type="search"
+            name="q"
+            autocomplete="off"
+            :placeholder="placeholder"
+            size="xl"
+            icon="i-lucide-search"
+            class="w-full"
+            @keyup.enter="submit"
+        >
+            <template #trailing>
+                <UButton
+                    type="submit"
+                    color="primary"
+                    variant="solid"
+                    size="sm"
+                    aria-label="Search"
+                    @click="submit"
+                >
+                    Search
+                </UButton>
+            </template>
+        </UInput>
 </template>

@@ -22,6 +22,9 @@ final class CategoryResource extends JsonResource
             'parent' => $this->whenLoaded('parentRecursive', function () {
                 return new CategoryResource($this->parentRecursive);
             }),
+            'children' => CategoryResource::collection(
+                $this->whenLoaded('childrenRecursive')
+            ),
         ];
     }
 }

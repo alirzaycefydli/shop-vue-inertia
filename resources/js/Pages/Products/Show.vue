@@ -26,7 +26,6 @@ const props = defineProps({
                 <UIcon name="i-lucide-chevron-right" class="size-4"/>
                 <span class="text-highlighted">{{ product.data.name }}</span>
             </nav>
-
             <section class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
                 <div class="space-y-3">
                     <div
@@ -34,7 +33,6 @@ const props = defineProps({
                         <ImageSlider :items="product.data.images"/>
                     </div>
                 </div>
-
                 <div class="space-y-6">
                     <div>
                         <div class="mt-4 flex items-center gap-3">
@@ -47,18 +45,14 @@ const props = defineProps({
                             {{ product.data.name }}
                         </h1>
                     </div>
-
                     <div class="flex items-end gap-3">
                         <p class="text-3xl font-semibold text-highlighted">
                             {{ product.data.price }}
                         </p>
                     </div>
-
                     <p class="text-base leading-7 text-muted">
                         {{ product.data.description }}
                     </p>
-
-
                     <div class="flex flex-col gap-3 sm:flex-row">
                         <UButton
                             color="primary"
@@ -68,7 +62,6 @@ const props = defineProps({
                         >
                             Add to cart
                         </UButton>
-
                         <UButton
                             color="neutral"
                             variant="outline"
@@ -79,7 +72,6 @@ const props = defineProps({
                             Add to wishlist
                         </UButton>
                     </div>
-
                     <div class="rounded-md border border-default bg-elevated p-5">
                         <h2 class="text-sm font-semibold text-highlighted">
                             Product details

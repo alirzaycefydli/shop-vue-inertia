@@ -63,14 +63,12 @@ watch(
 </script>
 
 <template>
-    <AppLayout title="Products"
-    >
+    <AppLayout title="Products">
         <div class="space-y-8">
             <section class="rounded-md border border-default bg-elevated p-6 shadow-sm sm:p-8">
                 <UBadge color="primary" variant="soft">
                     Product catalog
                 </UBadge>
-
                 <div class="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
                         <h1 class="text-3xl font-semibold tracking-tight text-highlighted">
@@ -80,7 +78,6 @@ watch(
                             Browse the storefront catalog and sort products by name, price, or date.
                         </p>
                     </div>
-
                     <div class="w-full lg:w-64">
                         <label class="mb-2 block text-sm font-medium text-highlighted">
                             Sort products
@@ -96,16 +93,14 @@ watch(
                     </div>
                 </div>
             </section>
-
-            <section class="space-y-4">
+            <section class="space-y-4" v-if="products.meta.total > 0">
                 <div class="flex items-center justify-between gap-4">
                     <p class="text-sm text-muted">
-                        Showing {{ $page.props.products.meta.to }} from {{ $page.props.products.meta.total }} products
+                        Showing {{ products.meta.to }} from {{ products.meta.total }} products
                     </p>
-
                     <UButton
                         as="Link"
-                        to="/categories"
+                        :to="route('categories.index')"
                         color="neutral"
                         variant="outline"
                         icon="i-lucide-list-filter"
@@ -126,6 +121,9 @@ watch(
                     :items-per-page="products.meta.per_page"
                     :sibling-count="3"
                 />
+            </section>
+            <section v-else>
+                <p class="text-red-600">No products have been found!</p>
             </section>
         </div>
     </AppLayout>

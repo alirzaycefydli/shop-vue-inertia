@@ -5,36 +5,33 @@ declare(strict_types=1);
 namespace App\Actions\Products;
 
 use App\Data\ProductFilterData;
-use App\Enums\ProductSort;
 use App\Models\Product;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
-final class AllProducts
+final readonly class AllProducts
 {
+    public function __construct(private ProductSorting $sorting, private ProductsByCategory $productsByCategory) {}
+
     /**
      * @return LengthAwarePaginator<int, Product>
      */
-    public function handle(ProductFilterData $filters): LengthAwarePaginator
+    public function handle(ProductFilterData $filters, ?Collection $categoryIDs): LengthAwarePaginator
     {
         $query = Product::query();
 
         if ($filters->search) {
-            $query->where('name', 'like', "%{$filters->search}%")
-                ->orWhere('description', 'like', "%{$filters->search}%");
+            $query->where(function ($query) use ($filters) {
+                $query->where('name', 'like', "%{$filters->search}%")
+                    ->orWhere('description', 'like', "%{$filters->search}%");
+            });
         }
 
         if ($filters->sort) {
-            match ($filters->sort) {
-                ProductSort::Newest => $query->latest(),
-                ProductSort::Oldest => $query->oldest(),
-                ProductSort::NameAscending => $query->orderBy('name', 'asc'),
-                ProductSort::NameDescending => $query->orderBy('name', 'desc'),
-                ProductSort::PriceHigh => $query->orderBy('price', 'asc'),
-                ProductSort::PriceLow => $query->orderBy('price', 'desc'),
-            };
+            $this->sorting->handle($query, $filters->sort);
         }
 
-        // TODO:: Filter by categories
+        $this->productsByCategory->handle($query, $categoryIDs);
 
         return $query
             ->with(['primaryImage', 'primaryCategory'])

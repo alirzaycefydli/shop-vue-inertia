@@ -22,7 +22,8 @@ final class ProductController extends Controller
         return Inertia::render('Products/Index', [
             'products' => ProductCardResource::collection(
                 $action->handle(
-                    ProductFilterData::fromRequest($request)
+                    ProductFilterData::fromRequest($request),
+                    null
                 )
             ),
             'sortOptions' => collect(ProductSort::cases())

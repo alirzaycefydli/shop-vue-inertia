@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 #[Fillable(['name', 'slug', 'parent_id'])]
 final class Category extends Model
@@ -24,7 +25,7 @@ final class Category extends Model
      */
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class, 'category_product', 'category_id', 'product_id');
     }
 
     /**
@@ -57,6 +58,32 @@ final class Category extends Model
     public function childrenRecursive(): HasMany
     {
         return $this->children()->with('childrenRecursive');
+    }
+
+    /**
+     * Returns the IDs of parent and it's recursive children
+     *
+     * @return Collection<int, string>
+     */
+    public function descendantsAndSelfIDs(): Collection
+    {
+        // Does the exact same.
+        /*return collect([$this])
+            ->flatMap(fn () => [
+                $this->id,
+                ...$this->childrenRecursive->pluck('id'),
+            ]);*/
+
+        // Does the exact same.
+        /*return collect([$this->id])
+            ->merge(
+                $this->childrenRecursive->pluck('id')
+            );*/
+
+        return collect([
+            $this->id,
+            ...$this->childrenRecursive->pluck('id'),
+        ]);
     }
 
     /**
