@@ -1,10 +1,9 @@
 <script setup>
 import {computed} from 'vue';
-import {Head, router} from '@inertiajs/vue3';
+import {Head, router, usePage} from '@inertiajs/vue3';
 import Header from '@/Components/Layout/Header.vue';
 import Footer from '@/Components/Layout/Footer.vue';
 import {
-    categories,
     footerLinkGroups,
     navigationItems,
     socialLinks,
@@ -25,6 +24,9 @@ const props = defineProps({
         default: 7,
     },
 });
+
+const page = usePage()
+const categories = computed(() => page.props.navigation_categories.data)
 
 const handleSearch = (value) => {
     if (value.length > 0) {

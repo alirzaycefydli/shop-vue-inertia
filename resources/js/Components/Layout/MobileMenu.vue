@@ -1,6 +1,7 @@
 <script setup>
-import { onBeforeUnmount, watch } from 'vue';
+import {computed, onBeforeUnmount, watch} from 'vue';
 import SearchBar from './SearchBar.vue';
+import {usePage} from "@inertiajs/vue3";
 
 const props = defineProps({
     open: {
@@ -52,7 +53,7 @@ watch(
             window.removeEventListener('keydown', handleKeydown);
         }
     },
-    { immediate: true },
+    {immediate: true},
 );
 
 onBeforeUnmount(() => {
@@ -101,7 +102,8 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                         class="absolute right-0 top-0 flex h-full w-full max-w-sm flex-col overflow-hidden bg-white shadow-2xl transition-colors dark:bg-slate-950"
                         aria-label="Mobile menu"
                     >
-                        <div class="flex items-center justify-between border-b border-slate-200 px-4 py-4 dark:border-slate-800">
+                        <div
+                            class="flex items-center justify-between border-b border-slate-200 px-4 py-4 dark:border-slate-800">
                             <p class="text-sm font-semibold text-slate-950 dark:text-white">Menu</p>
 
                             <UButton
@@ -118,7 +120,7 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                         </div>
 
                         <div class="flex-1 space-y-6 overflow-y-auto px-4 py-5">
-                            <SearchBar placeholder="Search products" />
+                            <SearchBar placeholder="Search products"/>
 
                             <section class="space-y-3">
                                 <h2 class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
@@ -134,7 +136,7 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                                         @click="emit('close')"
                                     >
                                         <span>{{ item.label }}</span>
-                                        <UIcon name="i-lucide-chevron-right" class="size-4 text-slate-400" />
+                                        <UIcon name="i-lucide-chevron-right" class="size-4 text-slate-400"/>
                                     </Link>
                                 </div>
                             </section>
@@ -147,16 +149,17 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                                 <div class="space-y-1">
                                     <Link
                                         v-for="category in categories"
-                                        :key="category.href"
-                                        :href="category.href"
+                                        :key="category.slug"
+                                        :href="route('categories.index', {
+                                            _query: {
+                                                category: category.slug
+                                            }
+                                        })"
                                         class="block rounded-2xl px-3 py-3 transition hover:bg-slate-50 focus:outline-none focus-visible:bg-slate-50 dark:hover:bg-slate-900 dark:focus-visible:bg-slate-900"
                                         @click="emit('close')"
                                     >
                                         <span class="block text-sm font-medium text-slate-950 dark:text-white">
-                                            {{ category.label }}
-                                        </span>
-                                        <span class="block text-sm text-slate-500 dark:text-slate-400">
-                                            {{ category.description }}
+                                            {{ category.name }}
                                         </span>
                                     </Link>
                                 </div>
@@ -172,7 +175,7 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                                     @click="emit('close')"
                                 >
                                     <span class="inline-flex items-center gap-2">
-                                        <UIcon name="i-lucide-heart" class="size-4" />
+                                        <UIcon name="i-lucide-heart" class="size-4"/>
                                         Wishlist
                                     </span>
 
@@ -190,7 +193,7 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                                     @click="emit('close')"
                                 >
                                     <span class="inline-flex items-center gap-2">
-                                        <UIcon name="i-lucide-shopping-cart" class="size-4" />
+                                        <UIcon name="i-lucide-shopping-cart" class="size-4"/>
                                         Cart
                                     </span>
 
@@ -211,7 +214,7 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                                         class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950 focus:outline-none focus-visible:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white dark:focus-visible:bg-slate-900"
                                         @click="emit('close')"
                                     >
-                                        <UIcon name="i-lucide-user" class="size-4" />
+                                        <UIcon name="i-lucide-user" class="size-4"/>
                                         My Account
                                     </Link>
 
@@ -220,7 +223,7 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                                         class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950 focus:outline-none focus-visible:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white dark:focus-visible:bg-slate-900"
                                         @click="emit('close')"
                                     >
-                                        <UIcon name="i-lucide-package" class="size-4" />
+                                        <UIcon name="i-lucide-package" class="size-4"/>
                                         Orders
                                     </Link>
 
@@ -229,7 +232,7 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                                         class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950 focus:outline-none focus-visible:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white dark:focus-visible:bg-slate-900"
                                         @click="emit('close')"
                                     >
-                                        <UIcon name="i-lucide-settings" class="size-4" />
+                                        <UIcon name="i-lucide-settings" class="size-4"/>
                                         Settings
                                     </Link>
 
@@ -240,7 +243,7 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                                         class="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950 focus:outline-none focus-visible:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white dark:focus-visible:bg-slate-900"
                                         @click="emit('close')"
                                     >
-                                        <UIcon name="i-lucide-log-out" class="size-4" />
+                                        <UIcon name="i-lucide-log-out" class="size-4"/>
                                         Logout
                                     </Link>
                                 </div>

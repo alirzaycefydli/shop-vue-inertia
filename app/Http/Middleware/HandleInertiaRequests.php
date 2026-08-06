@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Actions\Categories\NavigationCategories;
+use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -38,7 +40,10 @@ final class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return [
-            'search' => fn () => $request->has('search') ? $request->search : '',
+            'search' => fn() => $request->has('search') ? $request->search : '',
+            'navigation_categories' => fn() => CategoryResource::collection(
+                app(NavigationCategories::class)->handle()
+            )
         ];
     }
 }
