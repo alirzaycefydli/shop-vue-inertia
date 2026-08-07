@@ -40,10 +40,10 @@ final class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return [
-            'search' => fn() => $request->has('search') ? $request->search : '',
-            'navigation_categories' => fn() => CategoryResource::collection(
+            'search' => fn () => $request->has('search') ? $request->search : '',
+            'navigation_categories' => fn () => CategoryResource::collection(
                 app(NavigationCategories::class)->handle()
-            )
+            ),
         ];
     }
 }

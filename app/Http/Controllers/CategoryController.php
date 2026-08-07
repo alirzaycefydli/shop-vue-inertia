@@ -30,7 +30,7 @@ final class CategoryController extends Controller
             ),
             'sort' => $request->query('sort') ?? ProductSort::Newest,
             'sortOptions' => collect(ProductSort::cases())
-                ->map(fn(ProductSort $sort) => [
+                ->map(fn (ProductSort $sort) => [
                     'value' => $sort->value,
                     'label' => $sort->label(),
                 ]),

@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref, watch} from 'vue';
+import {computed, reactive, ref, watch} from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CategoryTreeItem from "@/Components/UI/CategoryTreeItem.vue";
 import ProductCard from "@/Components/UI/ProductCard.vue";
@@ -31,6 +31,7 @@ defineEmits(['select-category'])
 const selectedCategory = ref(props.selectedCategory)
 const goToCategory = (category) => {
     selectedCategory.value = category
+    query.page = 1
 }
 
 const query = reactive({
