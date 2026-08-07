@@ -13,3 +13,11 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+
+Route::get('/register', function (){
+    return inertia('Auth/Register');
+})->name('auth.register');
+
+Route::get('/login', function (){
+    return inertia('Auth/Login');
+})->name('auth.login');
