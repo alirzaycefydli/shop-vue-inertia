@@ -2,6 +2,13 @@
 import AppLayout from "../../Layouts/AppLayout.vue";
 import {ref} from "vue";
 import {router} from "@inertiajs/vue3";
+import ErrorMessages from "../../Components/UI/ErrorMessages.vue";
+
+const props = defineProps({
+    errors: {
+        type: Object
+    }
+})
 
 const fields = ref([
     {
@@ -29,13 +36,12 @@ const fields = ref([
         placeholder: 'Repeat your strong password'
     },
 ])
-
 const loading = ref(false)
 
-const onSubmit = async (data) => {
+const onSubmit = (data) => {
     loading.value = true
 
-    router.post('', data, {
+    router.post(route('register.store'), data.data, {
         onFinish: () => {
             loading.value = false
         }
@@ -47,10 +53,7 @@ const onSubmit = async (data) => {
     <AppLayout title="Register">
         <div class="flex flex-col items-center justify-center gap-4 p-4">
             <UPageCard class="w-full max-w-md">
-                <UAlert
-                    color="error"
-                    :title="fields.email"
-                />
+                <ErrorMessages :errors="props.errors"/>
                 <UAuthForm
                     class="max-w-md"
                     title="Register an account"
@@ -60,7 +63,7 @@ const onSubmit = async (data) => {
                     label: 'Register',
                     loading,
                 }"
-                    @submit="onSubmit"
+                    @submit.prevent="onSubmit"
                 />
             </UPageCard>
         </div>

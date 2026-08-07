@@ -1,7 +1,7 @@
 <script setup>
 import {computed, onBeforeUnmount, watch} from 'vue';
 import SearchBar from './SearchBar.vue';
-import {usePage} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 
 const props = defineProps({
     open: {
@@ -16,10 +16,6 @@ const props = defineProps({
         type: Array,
         required: true,
     },
-    user: {
-        type: Object,
-        default: null,
-    },
     cartCount: {
         type: Number,
         required: true,
@@ -30,11 +26,14 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['close']);
+const page = usePage()
+const user = computed(() => page.props.user)
+
+const emit = defineEmits(['close'])
 
 const handleKeydown = (event) => {
     if (event.key === 'Escape') {
-        emit('close');
+        emit('close')
     }
 };
 
@@ -42,15 +41,15 @@ watch(
     () => props.open,
     (open) => {
         if (typeof window === 'undefined' || typeof document === 'undefined') {
-            return;
+            return
         }
 
-        document.body.classList.toggle('overflow-hidden', open);
+        document.body.classList.toggle('overflow-hidden', open)
 
         if (open) {
-            window.addEventListener('keydown', handleKeydown);
+            window.addEventListener('keydown', handleKeydown)
         } else {
-            window.removeEventListener('keydown', handleKeydown);
+            window.removeEventListener('keydown', handleKeydown)
         }
     },
     {immediate: true},
@@ -58,15 +57,21 @@ watch(
 
 onBeforeUnmount(() => {
     if (typeof document !== 'undefined') {
-        document.body.classList.remove('overflow-hidden');
+        document.body.classList.remove('overflow-hidden')
     }
 
     if (typeof window !== 'undefined') {
-        window.removeEventListener('keydown', handleKeydown);
+        window.removeEventListener('keydown', handleKeydown)
     }
 });
 
-const countLabel = (count) => (count > 99 ? '99+' : String(count));
+const countLabel = (count) => (count > 99 ? '99+' : String(count))
+
+const onSubmit = (param) => {
+    emit('close')
+
+    router.get(route(param))
+}
 </script>
 
 <template>
@@ -79,7 +84,7 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
             leave-from-class="opacity-100"
             leave-to-class="opacity-0"
         >
-            <div v-if="open" class="fixed inset-0 z-50 lg:hidden">
+            <div v-if="open" class="fixed inset-0 z-100 lg:hidden">
                 <button
                     type="button"
                     class="absolute inset-0 bg-slate-950/40 dark:bg-slate-950/70"
@@ -237,7 +242,7 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                                     </Link>
 
                                     <Link
-                                        href="/logout"
+                                        :href="route('logout')"
                                         method="post"
                                         as="button"
                                         class="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950 focus:outline-none focus-visible:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white dark:focus-visible:bg-slate-900"
@@ -251,22 +256,20 @@ const countLabel = (count) => (count > 99 ? '99+' : String(count));
                                 <div v-else class="grid grid-cols-2 gap-3">
                                     <UButton
                                         as="Link"
-                                        to="/login"
                                         color="neutral"
                                         variant="outline"
-                                        class="justify-center"
-                                        @click="emit('close')"
+                                        class="justify-center cursor-default"
+                                        @click="onSubmit('login')"
                                     >
                                         Login
                                     </UButton>
 
                                     <UButton
                                         as="Link"
-                                        to="/register"
                                         color="primary"
                                         variant="solid"
-                                        class="justify-center"
-                                        @click="emit('close')"
+                                        class="justify-center cursor-default"
+                                        @click="onSubmit('register')"
                                     >
                                         Register
                                     </UButton>

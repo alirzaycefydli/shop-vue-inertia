@@ -1,12 +1,18 @@
 <script setup>
 import AppLayout from "../../Layouts/AppLayout.vue";
 import {ref} from "vue";
-import {router} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
+
+defineProps({
+    errors: {
+        type: Object
+    }
+})
 
 const fields = ref([
     {
         name: 'email',
-        type: 'email',
+        type: 'text',
         label: 'Email',
         placeholder: 'your_email@example.com'
     },
@@ -17,18 +23,20 @@ const fields = ref([
         placeholder: 'Your password'
     },
     {
-        name: 'remember-me',
+        name: 'remember',
         type: 'checkbox',
         label: 'Remember me',
     },
 ])
 
+const page = usePage()
+
 const loading = ref(false)
 
-const onSubmit = async (data) => {
+const onSubmit = (data) => {
     loading.value = true
 
-    router.post('', data, {
+    router.post(route('login.store'), data.data, {
         onFinish: () => {
             loading.value = false
         }
@@ -37,7 +45,7 @@ const onSubmit = async (data) => {
 </script>
 
 <template>
-    <AppLayout title="Register">
+    <AppLayout title="Login">
         <div class="flex flex-col items-center justify-center gap-4 p-4">
             <UPageCard class="w-full max-w-md">
                 <UAlert
@@ -53,7 +61,7 @@ const onSubmit = async (data) => {
                     label: 'Login',
                     loading,
                 }"
-                    @submit="onSubmit"
+                    @submit.prevent="onSubmit"
                 />
             </UPageCard>
         </div>

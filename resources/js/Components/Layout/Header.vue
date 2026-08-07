@@ -18,10 +18,6 @@ const props = defineProps({
         type: Array,
         required: true,
     },
-    user: {
-        type: Object,
-        default: null,
-    },
     cartCount: {
         type: Number,
         default: 0,
@@ -53,7 +49,7 @@ const mobileMenuOpen = ref(false);
                     <ThemeToggle/>
                     <WishlistButton :count="wishlistCount ?? 0"/>
                     <CartButton :count="cartCount ?? 0"/>
-                    <UserMenu :user="user"/>
+                    <UserMenu/>
                 </div>
 
                 <div class="ml-auto flex items-center gap-2 lg:hidden">
@@ -85,7 +81,6 @@ const mobileMenuOpen = ref(false);
             :open="mobileMenuOpen"
             :categories="categories"
             :items="items"
-            :user="user"
             :cart-count="cartCount ?? 0"
             :wishlist-count="wishlistCount ?? 0"
             @close="mobileMenuOpen = false"

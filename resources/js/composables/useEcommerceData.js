@@ -1,9 +1,3 @@
-export const user = {
-    id: 1,
-    name: 'John Doe',
-    avatar: null,
-};
-
 export const navigationItems = [
     { label: 'Home', href: route('home') },
     { label: 'Products', href: '/products' },
