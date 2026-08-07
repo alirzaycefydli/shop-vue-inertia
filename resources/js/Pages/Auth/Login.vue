@@ -1,9 +1,10 @@
 <script setup>
 import AppLayout from "../../Layouts/AppLayout.vue";
 import {ref} from "vue";
-import {router, usePage} from "@inertiajs/vue3";
+import {router} from "@inertiajs/vue3";
+import ErrorMessages from "../../Components/UI/ErrorMessages.vue";
 
-defineProps({
+const props = defineProps({
     errors: {
         type: Object
     }
@@ -29,8 +30,6 @@ const fields = ref([
     },
 ])
 
-const page = usePage()
-
 const loading = ref(false)
 
 const onSubmit = (data) => {
@@ -48,10 +47,7 @@ const onSubmit = (data) => {
     <AppLayout title="Login">
         <div class="flex flex-col items-center justify-center gap-4 p-4">
             <UPageCard class="w-full max-w-md">
-                <UAlert
-                    color="error"
-                    :title="fields.email"
-                />
+                <ErrorMessages :errors="props.errors" />
                 <UAuthForm
                     class="max-w-md"
                     title="Login to your account"
