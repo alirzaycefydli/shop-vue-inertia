@@ -34,6 +34,7 @@ final class CategoryController extends Controller
                     'value' => $sort->value,
                     'label' => $sort->label(),
                 ]),
+            'selectedCategory' => $request->query('category'),
         ]);
     }
 }

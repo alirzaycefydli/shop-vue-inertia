@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from "vue";
+import {ref, watch} from "vue";
 
 const props = defineProps({
     category: {
@@ -15,6 +15,27 @@ const props = defineProps({
 const emit = defineEmits(['select-category'])
 
 const open = ref(false);
+
+const containsCategory = (category, selectedSlug) => {
+    if (category.slug === selectedSlug) {
+        return true
+    }
+
+    return category.children?.some(child =>
+        containsCategory(child, selectedSlug)
+    )
+}
+
+watch(
+    () => props.selectedCategory,
+    () => {
+        open.value = containsCategory(
+            props.category,
+            props.selectedCategory
+        )
+    },
+    {immediate: true}
+)
 </script>
 
 <template>

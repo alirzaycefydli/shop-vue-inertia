@@ -73,17 +73,18 @@ onBeforeUnmount(() => {
             <div class="space-y-1">
                 <Link
                     v-for="category in categories"
-                    :key="category.href"
-                    :href="category.href"
+                    :key="category.slug"
+                    :href="route('categories.index', {
+                        _query: {
+                            category: category.slug
+                        }
+                    })"
                     class="block rounded-2xl px-3 py-3 transition hover:bg-slate-50 focus:outline-none focus-visible:bg-slate-50 dark:hover:bg-slate-800 dark:focus-visible:bg-slate-800"
                     role="menuitem"
                     @click="close"
                 >
                     <span class="block text-sm font-medium text-slate-950 dark:text-white">
-                        {{ category.label }}
-                    </span>
-                    <span class="block text-sm text-slate-500 dark:text-slate-400">
-                        {{ category.description }}
+                        {{ category.name }}
                     </span>
                 </Link>
             </div>

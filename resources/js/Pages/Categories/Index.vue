@@ -1,9 +1,9 @@
 <script setup>
-import {reactive, ref, watch} from 'vue';
+import {computed, reactive, ref, watch} from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CategoryTreeItem from "@/Components/UI/CategoryTreeItem.vue";
 import ProductCard from "@/Components/UI/ProductCard.vue";
-import {router} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 
 const props = defineProps({
     categories: {
@@ -21,13 +21,17 @@ const props = defineProps({
     sort: {
         type: String,
     },
+    selectedCategory: {
+        type: String
+    }
 });
 
 defineEmits(['select-category'])
 
-const selectedCategory = ref(null)
+const selectedCategory = ref(props.selectedCategory)
 const goToCategory = (category) => {
     selectedCategory.value = category
+    query.page = 1
 }
 
 const query = reactive({
