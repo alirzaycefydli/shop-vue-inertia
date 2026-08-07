@@ -4,21 +4,9 @@ export const user = {
     avatar: null,
 };
 
-export const categories = [
-    { label: 'Men', href: '/categories/men', description: 'Shirts, denim, tailoring, outerwear' },
-    { label: 'Women', href: '/categories/women', description: 'Everyday essentials and statement pieces' },
-    { label: 'Footwear', href: '/categories/footwear', description: 'Sneakers, boots, loafers and more' },
-    { label: 'Accessories', href: '/categories/accessories', description: 'Bags, jewelry, belts and small goods' },
-    { label: 'Home', href: '/categories/home', description: 'Kitchen, storage and interior accents' },
-    { label: 'Beauty', href: '/categories/beauty', description: 'Skincare, grooming and personal care' },
-];
-
 export const navigationItems = [
-    { label: 'Home', href: '/' },
+    { label: 'Home', href: route('home') },
     { label: 'Products', href: '/products' },
-    { label: 'Brands', href: '/brands' },
-    { label: 'Deals', href: '/deals' },
-    { label: 'New Arrivals', href: '/new-arrivals' },
     { label: 'Contact', href: '/contact' },
 ];
 
