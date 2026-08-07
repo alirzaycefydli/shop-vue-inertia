@@ -1,22 +1,20 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
+import {router, usePage} from "@inertiajs/vue3";
 
-const props = defineProps({
-    user: {
-        type: Object,
-        default: null,
-    },
-});
+
+const page = usePage()
+const user = computed(() => page.props.user);
 
 const isOpen = ref(false);
 const menuRef = ref(null);
 
 const initials = computed(() => {
-    if (!props.user?.name) {
+    if (!user?.value.name) {
         return 'U';
     }
 
-    return props.user.name
+    return user?.value.name
         .split(' ')
         .slice(0, 2)
         .map((part) => part[0]?.toUpperCase() ?? '')
@@ -45,6 +43,10 @@ const handleKeydown = (event) => {
     }
 };
 
+const onSubmit = (param) => {
+    router.get(route(param))
+}
+
 onMounted(() => {
     document.addEventListener('click', handleClickOutside);
     window.addEventListener('keydown', handleKeydown);
@@ -65,7 +67,8 @@ onBeforeUnmount(() => {
             aria-haspopup="menu"
             @click.stop="toggle"
         >
-            <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white dark:text-black">
+            <span
+                class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white dark:text-black">
                 {{ initials }}
             </span>
 
@@ -83,11 +86,11 @@ onBeforeUnmount(() => {
 
         <div
             v-if="isOpen"
-            class="absolute right-0 top-full z-[300] mt-3 w-64 rounded-md border border-slate-200 bg-white p-2 shadow-2xl transition-colors dark:border-slate-800 dark:bg-slate-900"
+            class="absolute right-0 top-full z-300 mt-3 w-64 rounded-md border border-slate-200 bg-white p-2 shadow-2xl transition-colors dark:border-slate-800 dark:bg-slate-900"
             role="menu"
         >
             <div class="px-3 py-3">
-                <p class="text-sm font-semibold text-slate-950 dark:text-white">{{ user.name }}</p>
+                <p class="text-sm font-semibold text-slate-950 dark:text-white">{{ user.name }}name</p>
                 <p class="text-xs text-slate-500 dark:text-slate-400">Signed in</p>
             </div>
 
@@ -98,7 +101,7 @@ onBeforeUnmount(() => {
                     role="menuitem"
                     @click="close"
                 >
-                    <UIcon name="i-lucide-user" class="size-4" />
+                    <UIcon name="i-lucide-user" class="size-4"/>
                     My Account
                 </Link>
 
@@ -108,7 +111,7 @@ onBeforeUnmount(() => {
                     role="menuitem"
                     @click="close"
                 >
-                    <UIcon name="i-lucide-package" class="size-4" />
+                    <UIcon name="i-lucide-package" class="size-4"/>
                     Orders
                 </Link>
 
@@ -118,7 +121,7 @@ onBeforeUnmount(() => {
                     role="menuitem"
                     @click="close"
                 >
-                    <UIcon name="i-lucide-heart" class="size-4" />
+                    <UIcon name="i-lucide-heart" class="size-4"/>
                     Wishlist
                 </Link>
 
@@ -128,19 +131,19 @@ onBeforeUnmount(() => {
                     role="menuitem"
                     @click="close"
                 >
-                    <UIcon name="i-lucide-settings" class="size-4" />
+                    <UIcon name="i-lucide-settings" class="size-4"/>
                     Settings
                 </Link>
 
                 <Link
-                    href="/logout"
+                    :href="route('logout')"
                     method="post"
                     as="button"
                     class="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-50 hover:text-slate-950 focus:outline-none focus-visible:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white dark:focus-visible:bg-slate-800"
                     role="menuitem"
                     @click="close"
                 >
-                    <UIcon name="i-lucide-log-out" class="size-4" />
+                    <UIcon name="i-lucide-log-out" class="size-4"/>
                     Logout
                 </Link>
             </div>
@@ -150,18 +153,20 @@ onBeforeUnmount(() => {
     <div v-else class="flex items-center gap-2">
         <UButton
             as="Link"
-            to="/login"
             color="neutral"
             variant="outline"
+            class="cursor-default"
+            @click="onSubmit('login')"
         >
             Login
         </UButton>
 
         <UButton
             as="Link"
-            to="/register"
             color="primary"
             variant="solid"
+            class="cursor-default"
+            @click="onSubmit('register')"
         >
             Register
         </UButton>

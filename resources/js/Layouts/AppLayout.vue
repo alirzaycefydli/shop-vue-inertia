@@ -7,7 +7,6 @@ import {
     footerLinkGroups,
     navigationItems,
     socialLinks,
-    user,
 } from '@/composables/useEcommerceData';
 
 const props = defineProps({
@@ -57,7 +56,6 @@ const pageTitle = computed(() => (props.title ? `${props.title} | Shop` : 'Shop'
         <Header
             :categories="categories"
             :items="navigationItems"
-            :user="user"
             :cart-count="cartCount"
             :wishlist-count="wishlistCount"
             @search="handleSearch"

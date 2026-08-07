@@ -7,6 +7,7 @@ namespace App\Http\Middleware;
 use App\Actions\Categories\NavigationCategories;
 use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 final class HandleInertiaRequests extends Middleware
@@ -40,9 +41,17 @@ final class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return [
-            'search' => fn () => $request->has('search') ? $request->search : '',
-            'navigation_categories' => fn () => CategoryResource::collection(
+            'user' => fn() => $request->user()
+                ? $request->user()->only('id', 'name', 'email')
+                : null,
+            'search' => fn() => $request->has('search') ? $request->search : '',
+            'navigation_categories' => fn() => CategoryResource::collection(
                 app(NavigationCategories::class)->handle()
+            ),
+            'errors' => fn() => Inertia::always(
+                $request->session()->get('errors')
+                    ? $request->session()->get('errors')->getBag('default')->getMessages()
+                    : (object)[]
             ),
         ];
     }
