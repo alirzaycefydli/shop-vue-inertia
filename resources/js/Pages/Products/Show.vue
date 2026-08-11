@@ -1,6 +1,11 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import ImageSlider from "../../Components/UI/ImageSlider.vue";
+import {router, usePage} from "@inertiajs/vue3";
+import {computed, watch} from "vue";
+
+const page = usePage()
+const user = computed(() => page.props.user)
 
 const props = defineProps({
     product: {
@@ -8,6 +13,24 @@ const props = defineProps({
         required: true,
     },
 });
+
+const onSubmitWishlist = (slug) => {
+    router.post(route('wishlists.store', slug))
+}
+
+const messages = computed(() => page.props.messages)
+const toast = useToast()
+
+watch(
+    () => messages.value,
+    (messages) => {
+        toast.add({
+            color: messages.type,
+            title: messages.message,
+            icon: 'i-lucide-shopping-cart',
+        })
+    }
+)
 </script>
 
 <template>
@@ -63,11 +86,13 @@ const props = defineProps({
                             Add to cart
                         </UButton>
                         <UButton
+                            v-if="user"
                             color="neutral"
                             variant="outline"
                             size="xl"
                             icon="i-lucide-heart"
                             class="justify-center"
+                            @click.prevent="onSubmitWishlist(product.data.slug)"
                         >
                             Add to wishlist
                         </UButton>

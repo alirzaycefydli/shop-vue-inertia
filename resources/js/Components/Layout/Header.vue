@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import Logo from './Logo.vue';
 import SearchBar from './SearchBar.vue';
 import WishlistButton from './WishlistButton.vue';
@@ -8,6 +8,10 @@ import UserMenu from './UserMenu.vue';
 import Navigation from './Navigation.vue';
 import MobileMenu from './MobileMenu.vue';
 import ThemeToggle from '@/Layouts/ThemeToggle.vue';
+import {usePage} from "@inertiajs/vue3";
+
+const page= usePage()
+const user = computed(() => page.props.user)
 
 const props = defineProps({
     categories: {
@@ -47,7 +51,7 @@ const mobileMenuOpen = ref(false);
 
                 <div class="ml-auto hidden items-center gap-2 lg:flex">
                     <ThemeToggle/>
-                    <WishlistButton :count="wishlistCount ?? 0"/>
+                    <WishlistButton v-if="user" :count="wishlistCount ?? 0" :href="route('wishlists.show')"/>
                     <CartButton :count="cartCount ?? 0"/>
                     <UserMenu/>
                 </div>

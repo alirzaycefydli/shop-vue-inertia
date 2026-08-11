@@ -49,23 +49,25 @@ const pageTitle = computed(() => (props.title ? `${props.title} | Shop` : 'Shop'
 </script>
 
 <template>
-    <Head :title="pageTitle"/>
+    <UApp>
+        <Head :title="pageTitle"/>
 
-    <div
-        class="flex min-h-screen flex-col bg-white text-slate-950 transition-colors dark:bg-slate-950 dark:text-slate-100">
-        <Header
-            :categories="categories"
-            :items="navigationItems"
-            :cart-count="cartCount"
-            :wishlist-count="wishlistCount"
-            @search="handleSearch"
-        />
-        <main class="flex-1 bg-slate-50 transition-colors dark:bg-slate-950">
-            <div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-                <slot/>
-            </div>
-        </main>
+        <div
+            class="flex min-h-screen flex-col bg-white text-slate-950 transition-colors dark:bg-slate-950 dark:text-slate-100">
+            <Header
+                :categories="categories"
+                :items="navigationItems"
+                :cart-count="cartCount"
+                :wishlist-count="wishlistCount"
+                @search="handleSearch"
+            />
+            <main class="flex-1 bg-slate-50 transition-colors dark:bg-slate-950">
+                <div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+                    <slot/>
+                </div>
+            </main>
 
-        <Footer :link-groups="footerLinkGroups" :socials="socialLinks"/>
-    </div>
+            <Footer :link-groups="footerLinkGroups" :socials="socialLinks"/>
+        </div>
+    </UApp>
 </template>

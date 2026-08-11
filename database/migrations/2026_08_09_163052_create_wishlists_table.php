@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropPrimary();
-            $table->uuid('id')
-                ->change();
-            $table->primary('id');
+        Schema::create('wishlists', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('product_id')->constrained()->cascadeOnDelete();
+            $table->unique(['user_id', 'product_id']);
         });
     }
 
@@ -26,10 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropPrimary();
-            $table->unsignedBigInteger('id')->change();
-            $table->primary('id');
-        });
+        Schema::dropIfExists('wishlists');
     }
 };

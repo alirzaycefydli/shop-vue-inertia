@@ -41,17 +41,22 @@ final class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return [
-            'user' => fn() => $request->user()
+            'user' => fn () => $request->user()
                 ? $request->user()->only('id', 'name', 'email')
                 : null,
-            'search' => fn() => $request->has('search') ? $request->search : '',
-            'navigation_categories' => fn() => CategoryResource::collection(
+            'search' => fn () => $request->has('search')
+                ? $request->search
+                : '',
+            'navigation_categories' => fn () => CategoryResource::collection(
                 app(NavigationCategories::class)->handle()
             ),
-            'errors' => fn() => Inertia::always(
+            'errors' => fn () => Inertia::always(
                 $request->session()->get('errors')
                     ? $request->session()->get('errors')->getBag('default')->getMessages()
-                    : (object)[]
+                    : (object) []
+            ),
+            'messages' => fn () => Inertia::always(
+                $request->session()->get('messages')
             ),
         ];
     }

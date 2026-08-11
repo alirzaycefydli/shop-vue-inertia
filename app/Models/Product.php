@@ -59,6 +59,11 @@ final class Product extends Model
         return $this->belongsTo(Category::class, 'primary_category_id');
     }
 
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
     /**
      * It sets up a "creating" listener
      * to automatically generate a unique slug for the "Product" model based on its name.
