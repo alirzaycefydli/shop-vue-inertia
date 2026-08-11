@@ -16,7 +16,7 @@ Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 
 Route::middleware('auth')->group(function () {
-    Route::get('wishlists', [WishlistController::class, 'show'])->name('wishlists.show');
-    Route::post('wishlists/{product:slug}', [WishlistController::class, 'store'])->name('wishlists.store');
-    Route::delete('wishlists/{product:slug}', [WishlistController::class, 'destroy'])->name('wishlists.destroy');
+    Route::get('/wishlists', [WishlistController::class, 'index'])->name('wishlists.index');
+    Route::post('/wishlists/{product:slug}', [WishlistController::class, 'store'])->name('wishlists.store');
+    Route::delete('/wishlists/{product:slug}', [WishlistController::class, 'destroy'])->name('wishlists.destroy');
 });

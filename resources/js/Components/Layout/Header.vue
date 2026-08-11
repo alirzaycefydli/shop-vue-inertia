@@ -51,7 +51,7 @@ const mobileMenuOpen = ref(false);
 
                 <div class="ml-auto hidden items-center gap-2 lg:flex">
                     <ThemeToggle/>
-                    <WishlistButton v-if="user" :count="wishlistCount ?? 0" :href="route('wishlists.show')"/>
+                    <WishlistButton v-if="user" :count="wishlistCount ?? 0" :href="route('wishlists.index')"/>
                     <CartButton :count="cartCount ?? 0"/>
                     <UserMenu/>
                 </div>
