@@ -12,9 +12,9 @@ use Inertia\Inertia;
 
 final class WishlistController extends Controller
 {
-    public function show(AllWishlistProducts $action)
+    public function index(AllWishlistProducts $action)
     {
-        return Inertia::render('Wishlist/Show', [
+        return Inertia::render('Wishlist/Index', [
             'products' => $action->handle(auth()->user()),
         ]);
 

@@ -52,7 +52,7 @@ watch(
 const reload = (page) => {
     if (page > props.products.last_page)
         page = props.products.last_page
-    router.get(route('wishlists.show'), {page: page}, {
+    router.get(route('wishlists.index'), {page: page}, {
         onFinish: () => {
             toast.add({
                 color: pageProp.props.messages.type,
