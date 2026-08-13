@@ -55,6 +55,9 @@ final class HandleInertiaRequests extends Middleware
             'cart_count' => fn () => $request->user()
                 ? $request->user()->cart?->cartItem->count() ?? 0
                 : 0,
+            'wishlist_count' => fn () => $request->user()
+                ? $request->user()->wishlists?->count() ?? 0
+                : 0,
             'errors' => fn () => Inertia::always(
                 $request->session()->get('errors')
                     ? $request->session()->get('errors')->getBag('default')->getMessages()

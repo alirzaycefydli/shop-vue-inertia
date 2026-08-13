@@ -14,16 +14,13 @@ const props = defineProps({
         type: String,
         default: undefined,
     },
-    wishlistCount: {
-        type: Number,
-        default: 0,
-    },
 });
 
 const page = usePage()
 const categories = computed(() => page.props.navigation_categories.data)
 
 const cartCount = computed(() => page.props.cart_count)
+const wishlistCount = computed(() => page.props.wishlist_count)
 
 const handleSearch = (value) => {
     if (value.length > 0) {
