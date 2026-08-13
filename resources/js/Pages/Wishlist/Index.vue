@@ -42,6 +42,15 @@ const onSubmitDelete = (slug) => {
         },)
     }
 }
+
+const onSubmitAddToCart = (slug) => {
+    router.post(route('cart.store', slug), {
+        onSuccess: () => {
+            reload(data.value.current_page)
+        },
+    },)
+}
+
 watch(
     () => data.value.current_page,
     (page) => {
@@ -49,23 +58,15 @@ watch(
     }
 )
 
+const pageProps = usePage()
+const messages = computed(() => pageProps.props.messages)
+const toast = useToast()
+
 const reload = (page) => {
     if (page > props.products.last_page)
         page = props.products.last_page
-    router.get(route('wishlists.index'), {page: page}, {
-        onFinish: () => {
-            toast.add({
-                color: pageProp.props.messages.type,
-                title: pageProp.props.messages.message,
-                icon: 'i-lucide-heart',
-            })
-        }
-    })
+    router.get(route('wishlists.index'), {page: page})
 }
-
-const page = usePage()
-const messages = computed(() => page.props.messages)
-const toast = useToast()
 
 watch(
     () => messages.value,
@@ -107,6 +108,7 @@ watch(
                         color="neutral"
                         variant="ghost"
                         aria-label="Actions"
+                        @click.prevent="onSubmitAddToCart(row.original.data.slug)"
                     />
                     <UButton
                         icon="i-lucide-trash-2"
