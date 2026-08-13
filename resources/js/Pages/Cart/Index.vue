@@ -10,7 +10,7 @@ const props = defineProps({
     }
 })
 
-const cartCount = computed(()=> Object.keys(props.products.data).length)
+const cartCount = computed(() => Object.keys(props.products.data).length)
 
 const delivery = 5
 
@@ -48,15 +48,17 @@ const messages = computed(() => page.props.messages)
 const toast = useToast()
 
 const removeItem = (id) => {
-    router.delete(route('cart.destroy', id), {
-        onFinish: () => {
-            toast.add({
-                color: messages.value.type,
-                title: messages.value.message,
-                icon: 'i-lucide-shopping-cart',
-            })
-        }
-    })
+    if (window.confirm(`Are you sure you want to remove this item?`)) {
+        router.delete(route('cart.destroy', id), {
+            onFinish: () => {
+                toast.add({
+                    color: messages.value.type,
+                    title: messages.value.message,
+                    icon: 'i-lucide-shopping-cart',
+                })
+            }
+        })
+    }
 }
 </script>
 
