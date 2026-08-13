@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
@@ -20,3 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/wishlists/{product:slug}', [WishlistController::class, 'store'])->name('wishlists.store');
     Route::delete('/wishlists/{product:slug}', [WishlistController::class, 'destroy'])->name('wishlists.destroy');
 });
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/items/{product:slug}', [CartController::class, 'store'])->name('cart.store');
+Route::patch('/cart/items/{cartItem}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/items/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');

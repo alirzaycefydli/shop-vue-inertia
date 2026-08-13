@@ -10,7 +10,7 @@ import MobileMenu from './MobileMenu.vue';
 import ThemeToggle from '@/Layouts/ThemeToggle.vue';
 import {usePage} from "@inertiajs/vue3";
 
-const page= usePage()
+const page = usePage()
 const user = computed(() => page.props.user)
 
 const props = defineProps({
@@ -52,7 +52,7 @@ const mobileMenuOpen = ref(false);
                 <div class="ml-auto hidden items-center gap-2 lg:flex">
                     <ThemeToggle/>
                     <WishlistButton v-if="user" :count="wishlistCount ?? 0" :href="route('wishlists.index')"/>
-                    <CartButton :count="cartCount ?? 0"/>
+                    <CartButton :href="route('cart.index')" :count="cartCount ?? 0"/>
                     <UserMenu/>
                 </div>
 

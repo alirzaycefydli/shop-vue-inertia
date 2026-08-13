@@ -18,6 +18,10 @@ const onSubmitWishlist = (slug) => {
     router.post(route('wishlists.store', slug))
 }
 
+const onSubmitCart = (slug) => {
+    router.post(route('cart.store', slug))
+}
+
 const messages = computed(() => page.props.messages)
 const toast = useToast()
 
@@ -82,6 +86,7 @@ watch(
                             size="xl"
                             icon="i-lucide-shopping-cart"
                             class="justify-center"
+                            @click.prevent="onSubmitCart(product.data.slug)"
                         >
                             Add to cart
                         </UButton>

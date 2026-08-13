@@ -64,6 +64,11 @@ final class Product extends Model
         return $this->hasMany(Wishlist::class);
     }
 
+    public function cartItem(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
     /**
      * It sets up a "creating" listener
      * to automatically generate a unique slug for the "Product" model based on its name.
