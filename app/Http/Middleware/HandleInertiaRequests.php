@@ -6,7 +6,9 @@ namespace App\Http\Middleware;
 
 use App\Actions\Categories\NavigationCategories;
 use App\Http\Resources\CategoryResource;
+use App\Models\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Middleware;
 
@@ -50,6 +52,9 @@ final class HandleInertiaRequests extends Middleware
             'navigation_categories' => fn () => CategoryResource::collection(
                 app(NavigationCategories::class)->handle()
             ),
+            'cart_count' => fn () => $request->user()
+                ? $request->user()->cart?->cartItem->count() ?? 0
+                : 0,
             'errors' => fn () => Inertia::always(
                 $request->session()->get('errors')
                     ? $request->session()->get('errors')->getBag('default')->getMessages()
