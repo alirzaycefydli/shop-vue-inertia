@@ -2,7 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import ImageSlider from "../../Components/UI/ImageSlider.vue";
 import {router, usePage} from "@inertiajs/vue3";
-import {computed, watch} from "vue";
+import {computed} from "vue";
 
 const page = usePage()
 const user = computed(() => page.props.user)
@@ -15,26 +15,27 @@ const props = defineProps({
 });
 
 const onSubmitWishlist = (slug) => {
-    router.post(route('wishlists.store', slug))
-}
-
-const onSubmitCart = (slug) => {
-    router.post(route('cart.store', slug))
+    router.post(route('wishlists.store', slug), {}, {
+        onSuccess: () => sendToastMessage('heart')
+    })
 }
 
 const messages = computed(() => page.props.messages)
 const toast = useToast()
 
-watch(
-    () => messages.value,
-    (messages) => {
-        toast.add({
-            color: messages.type,
-            title: messages.message,
-            icon: 'i-lucide-shopping-cart',
-        })
-    }
-)
+const onSubmitCart = (slug) => {
+    router.post(route('cart.store', slug), {}, {
+        onSuccess: () => sendToastMessage('shopping-cart')
+    })
+}
+
+const sendToastMessage = (icon) => {
+    toast.add({
+        color: messages.value.type,
+        title: messages.value.message,
+        icon: 'i-lucide-' + icon,
+    })
+}
 </script>
 
 <template>
