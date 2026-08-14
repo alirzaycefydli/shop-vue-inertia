@@ -10,8 +10,6 @@ const props = defineProps({
     }
 })
 
-const cartCount = computed(() => Object.keys(props.products.data).length)
-
 const delivery = 5
 
 const subtotal = computed(() =>

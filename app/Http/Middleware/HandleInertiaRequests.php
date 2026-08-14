@@ -54,7 +54,7 @@ final class HandleInertiaRequests extends Middleware
             ),
             'cart_count' => fn () => $request->user()
                 ? $request->user()->cart?->cartItem->count() ?? 0
-                : 0,
+                : count(session()->get('cart',[])),
             'wishlist_count' => fn () => $request->user()
                 ? $request->user()->wishlists?->count() ?? 0
                 : 0,
