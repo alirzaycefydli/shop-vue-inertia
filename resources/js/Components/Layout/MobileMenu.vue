@@ -172,8 +172,9 @@ const onSubmit = (param) => {
 
                             <section class="grid grid-cols-2 gap-3">
                                 <UButton
+                                    v-if="user"
                                     as="Link"
-                                    to="/wishlist"
+                                    :to="route('wishlists.index')"
                                     color="neutral"
                                     variant="outline"
                                     class="justify-between"
@@ -191,7 +192,7 @@ const onSubmit = (param) => {
 
                                 <UButton
                                     as="Link"
-                                    to="/cart"
+                                    :to="route('cart.index')"
                                     color="neutral"
                                     variant="outline"
                                     class="justify-between"
