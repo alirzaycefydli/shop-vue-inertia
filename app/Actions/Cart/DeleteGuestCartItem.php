@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Actions\Cart;
 
-
 final class DeleteGuestCartItem
 {
     public function handle(string $product_id): void

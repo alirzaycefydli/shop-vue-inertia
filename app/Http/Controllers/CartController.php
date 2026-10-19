@@ -29,6 +29,7 @@ final class CartController extends Controller
         } else {
             $data = GuestCartItemResource::collection($guestAction->handle());
         }
+
         return Inertia::render('Cart/Index', [
             'products' => $data,
         ]);

@@ -6,9 +6,7 @@ namespace App\Http\Middleware;
 
 use App\Actions\Categories\NavigationCategories;
 use App\Http\Resources\CategoryResource;
-use App\Models\Cart;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Middleware;
 
@@ -54,7 +52,7 @@ final class HandleInertiaRequests extends Middleware
             ),
             'cart_count' => fn () => $request->user()
                 ? $request->user()->cart?->cartItem->count() ?? 0
-                : count(session()->get('cart',[])),
+                : count(session()->get('cart', [])),
             'wishlist_count' => fn () => $request->user()
                 ? $request->user()->wishlists?->count() ?? 0
                 : 0,
