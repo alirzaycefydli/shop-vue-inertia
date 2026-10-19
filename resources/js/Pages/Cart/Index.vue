@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "../../Layouts/AppLayout.vue";
-import {computed} from 'vue'
-import {router, usePage} from "@inertiajs/vue3";
+import { computed } from 'vue'
+import { router, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
     products: {
@@ -10,7 +10,9 @@ const props = defineProps({
     }
 })
 
-const delivery = 5
+const delivery = computed(() => {
+    return props.products.data.length > 0  ? 5 : 0
+})
 
 const subtotal = computed(() =>
     props.products.data.reduce(
@@ -19,7 +21,7 @@ const subtotal = computed(() =>
     )
 )
 
-const total = computed(() => subtotal.value + delivery)
+const total = computed(() => subtotal.value + delivery.value)
 
 const increaseQuantity = (item) => {
     if (item.product_quantity > item.quantity) {
@@ -38,7 +40,7 @@ const decreaseQuantity = (item) => {
 }
 
 const updateQuantity = (item) => {
-    router.patch(route('cart.update', item), {quantity: item.quantity})
+    router.patch(route('cart.update', item), { quantity: item.quantity })
 }
 
 const page = usePage()
@@ -57,6 +59,10 @@ const removeItem = (id) => {
             }
         })
     }
+}
+
+const handleCheckout = () => {
+    router.get(route('checkout.index'))
 }
 </script>
 
@@ -80,67 +86,39 @@ const removeItem = (id) => {
                     </template>
 
                     <div class="divide-y divide-default">
-                        <div
-                            v-for="item in props.products.data"
-                            :key="item.id"
-                            class="flex gap-4 py-5 first:pt-0 last:pb-0"
-                        >
-                            <UAvatar
-                                :src="item.product.image"
-                                :alt="item.product.name"
-                                size="3xl"
-                                class="shrink-0"
-                            />
+                        <div v-for="item in props.products.data" :key="item.id"
+                            class="flex gap-4 py-5 first:pt-0 last:pb-0">
+                            <UAvatar :src="item.product.image" :alt="item.product.name" size="3xl" class="shrink-0" />
                             <div class="flex min-w-0 flex-1 items-center justify-between gap-4">
-                                <Link
-                                    :href="route('products.show', item.product.slug)"
-                                    target="_blank"
-                                >
-                                    <div class="min-w-0">
-                                        <h3 class="truncate font-medium text-highlighted">
-                                            {{ item.product.name }}
-                                        </h3>
+                                <Link :href="route('products.show', item.product.slug)" target="_blank">
+                                <div class="min-w-0">
+                                    <h3 class="truncate font-medium text-highlighted">
+                                        {{ item.product.name }}
+                                    </h3>
 
-                                        <p class="mt-1 text-sm text-muted">
-                                            ${{ item.product.price.toFixed(2) }}
-                                        </p>
-                                    </div>
+                                    <p class="mt-1 text-sm text-muted">
+                                        ${{ item.product.price.toFixed(2) }}
+                                    </p>
+                                </div>
                                 </Link>
 
                                 <div class="flex shrink-0 items-center gap-4">
                                     <span class="font-semibold">
-                                            ${{ (item.product.price * item.quantity).toFixed(2) }}
-                                        </span>
+                                        ${{ (item.product.price * item.quantity).toFixed(2) }}
+                                    </span>
                                     <div class="flex items-center gap-2">
-                                        <UButton
-                                            icon="i-lucide-minus"
-                                            color="neutral"
-                                            variant="outline"
-                                            size="sm"
-                                            :disabled="item.quantity <= 1"
-                                            @click="decreaseQuantity(item)"
-                                        />
+                                        <UButton icon="i-lucide-minus" color="neutral" variant="outline" size="sm"
+                                            :disabled="item.quantity <= 1" @click="decreaseQuantity(item)" />
                                         <span class="w-8 text-center font-medium">
                                             {{ item.quantity }}
                                         </span>
-                                        <UButton
-                                            icon="i-lucide-plus"
-                                            color="neutral"
-                                            variant="outline"
-                                            size="sm"
+                                        <UButton icon="i-lucide-plus" color="neutral" variant="outline" size="sm"
                                             :disabled="item.quantity >= item.product_quantity"
-                                            @click="increaseQuantity(item)"
-                                        />
+                                            @click="increaseQuantity(item)" />
                                     </div>
                                     <div class="flex items-center justify-between gap-4 sm:justify-end">
-                                        <UButton
-                                            icon="i-lucide-trash-2"
-                                            color="error"
-                                            variant="ghost"
-                                            size="sm"
-                                            aria-label="Remove product"
-                                            @click="removeItem(item.id)"
-                                        />
+                                        <UButton icon="i-lucide-trash-2" color="error" variant="ghost" size="sm"
+                                            aria-label="Remove product" @click="removeItem(item.id)" />
                                     </div>
                                 </div>
                             </div>
@@ -150,10 +128,10 @@ const removeItem = (id) => {
                     <template #footer>
                         <div class="flex justify-between">
                             <Link :href="route('products.index')" class="flex justify-between gap-2">
-                                <UIcon name="i-lucide-arrow-left" class="size-5"/>
-                                <span>
-                                    Continue shopping
-                                </span>
+                            <UIcon name="i-lucide-arrow-left" class="size-5" />
+                            <span>
+                                Continue shopping
+                            </span>
                             </Link>
                         </div>
                     </template>
@@ -170,46 +148,45 @@ const removeItem = (id) => {
 
                     <div class="space-y-4">
                         <div class="flex justify-between text-sm">
-                        <span class="text-muted">
-                            Subtotal
-                        </span>
+                            <span class="text-muted">
+                                Subtotal
+                            </span>
 
                             <span>
-                            ${{ subtotal.toFixed(2) }}
-                        </span>
+                                ${{ subtotal.toFixed(2) }}
+                            </span>
                         </div>
 
                         <div class="flex justify-between text-sm">
-                        <span class="text-muted">
-                            Delivery
-                        </span>
+                            <span class="text-muted">
+                                Delivery
+                            </span>
 
                             <span>
-                            ${{ delivery.toFixed(2) }}
-                        </span>
+                                ${{ delivery.toFixed(2) }}
+                            </span>
                         </div>
 
-                        <USeparator/>
+                        <USeparator />
 
                         <div class="flex items-center justify-between">
-                        <span class="font-semibold">
-                            Total
-                        </span>
+                            <span class="font-semibold">
+                                Total
+                            </span>
 
                             <span class="text-xl font-bold">
-                            ${{ total.toFixed(2) }}
-                        </span>
+                                ${{ total.toFixed(2) }}
+                            </span>
                         </div>
                     </div>
 
                     <template #footer>
-                        <UButton
-                            block
-                            size="lg"
-                            trailing-icon="i-lucide-arrow-right"
-                        >
-                            Continue to delivery
-                        </UButton>
+                        <Link :href="route('checkout.index')" class="flex justify-between bg-primary rounded-lg p-2 text-white">
+                        <span>
+                            Continue
+                        </span>
+                        <UIcon name="i-lucide-arrow-right" class="size-5" />
+                        </Link>
                     </template>
                 </UCard>
             </div>
