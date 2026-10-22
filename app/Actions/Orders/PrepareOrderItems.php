@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Actions\Orders;
 
-use App\Models\Product;
 use Illuminate\Validation\ValidationException;
 
 final class PrepareOrderItems
@@ -15,13 +14,11 @@ final class PrepareOrderItems
         $items = [];
 
         foreach ($data as $item) {
-            $product = Product::where('slug', $item['product']['slug'])->firstOrFail();
-
-            if ($product->stock_quantity >= $item['quantity']) {
-                $subtotal += $item['quantity'] * $product->price;
+            if ($item['product']->stock_quantity >= $item['quantity']) {
+                $subtotal += $item['quantity'] * $item['product']->price;
                 $items[] = [
                     'quantity' => $item['quantity'],
-                    'product' => $product,
+                    'product' => $item['product'],
                 ];
             } else {
                 ValidationException::withMessages([

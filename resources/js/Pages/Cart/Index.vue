@@ -10,15 +10,15 @@ const props = defineProps({
     }
 })
 
-const delivery = computed(() => {
-    return props.products.data.length > 0  ? 5 : 0
-})
+const delivery = computed(() => 
+     props.products?.data?.length ? 5 : 0
+)
 
 const subtotal = computed(() =>
-    props.products.data.reduce(
+    props.products?.data?.reduce(
         (total, item) => total + item.product.price * item.quantity,
         0
-    )
+    ) ?? 0
 )
 
 const total = computed(() => subtotal.value + delivery.value)
@@ -61,8 +61,12 @@ const removeItem = (id) => {
     }
 }
 
+const hasProducts = computed(()=> props.products?.data?.length > 0)
+
 const handleCheckout = () => {
-    router.get(route('checkout.index'))
+    if(hasProducts) {
+        router.get(route('checkout.index'))
+    }
 }
 </script>
 
@@ -181,12 +185,17 @@ const handleCheckout = () => {
                     </div>
 
                     <template #footer>
-                        <Link :href="route('checkout.index')" class="flex justify-between bg-primary rounded-lg p-2 text-white">
+                        <button 
+                            @click="handleCheckout()" 
+                            :disabled="!hasProducts"
+                            :class="hasProducts ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'"
+                            class="flex justify-between bg-primary rounded-lg p-2 text-white w-full" 
+                        >
                         <span>
                             Continue
                         </span>
                         <UIcon name="i-lucide-arrow-right" class="size-5" />
-                        </Link>
+                        </button>
                     </template>
                 </UCard>
             </div>
