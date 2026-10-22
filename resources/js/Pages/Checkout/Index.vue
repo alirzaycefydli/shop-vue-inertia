@@ -7,14 +7,17 @@ import * as z from 'zod'
 const props = defineProps({
     products: {
         type: Object,
-        required: true,
+        default: null,
     },
     addresses: {
-        type: Object
+        type: Object,
+        default: null,
     }
 })
 
-const delivery = 5
+const delivery = computed(() =>
+    props.products?.data?.length ? 5 : 0
+)
 
 const page = usePage()
 const isAuthenticated = ref(page.props.user ? true : false)
@@ -71,15 +74,15 @@ const schema = computed(() => z.object({
 */
 
 const subtotal = computed(() =>
-    props.products.data.reduce(
+    props.products?.data?.reduce(
         (total, item) =>
             total + item.product.price * item.quantity,
         0
-    )
+    ) ?? 0
 )
 
 const total = computed(() =>
-    subtotal.value + delivery
+    subtotal.value + delivery.value
 )
 
 /*
@@ -313,7 +316,7 @@ const submitCheckout = async () => {
                         <div class="space-y-5">
                             <!-- PRODUCTS -->
                             <div class="space-y-4">
-                                <div v-for="item in props.products.data" :key="item.id" class="flex items-center gap-3">
+                                <div v-for="item in props.products?.data" :key="item.id" class="flex items-center gap-3">
                                     <UAvatar :src="item.product.image" :alt="item.product.name" size="lg"
                                         loading="lazy" />
 

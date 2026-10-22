@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\Cart\DeleteAllCartItems;
+use App\Actions\Cart\DeleteAllGuestCartItems;
 use App\Enums\OrderStatus;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ final class CheckoutSuccessController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request, DeleteAllCartItems $deleteAllCartItems)
+    public function __invoke(Request $request, DeleteAllCartItems $deleteAllCartItems, DeleteAllGuestCartItems $deleteAllGuestCartItems)
     {
         $stripe = new StripeClient(config('services.stripe.secret'));
 
@@ -50,8 +51,7 @@ final class CheckoutSuccessController extends Controller
         if (auth()->user()) {
             $deleteAllCartItems->handle();
         } else {
-            $cart = session()->get('cart', []);
-            unset($cart);
+            $deleteAllGuestCartItems->handle();
         }
 
         return inertia('Payment/Success');

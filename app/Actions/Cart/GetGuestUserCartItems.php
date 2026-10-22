@@ -22,7 +22,7 @@ final readonly class GetGuestUserCartItems
                 'id' => $product->id,
                 'quantity' => $item['quantity'],
                 'product_quantity' => $product->stock_quantity,
-                'product' => ProductCardResource::make($product),
+                'product' => ProductCardResource::make($product->load('primaryImage')),
             ];
         });
     }

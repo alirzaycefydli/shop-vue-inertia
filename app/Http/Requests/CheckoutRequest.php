@@ -84,30 +84,6 @@ final class CheckoutRequest extends FormRequest
                 'sometimes',
                 'boolean',
             ],
-
-            // Cart items
-            'items' => [
-                'required',
-                'array',
-                'min:1',
-            ],
-
-            'items.*' => [
-                'required',
-                'array',
-            ],
-
-            'items.*.id' => [
-                'required',
-                'uuid',
-                'distinct',
-            ],
-
-            'items.*.quantity' => [
-                'required',
-                'integer',
-                'min:1',
-            ],
         ];
     }
 }
