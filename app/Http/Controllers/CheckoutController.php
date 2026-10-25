@@ -42,7 +42,7 @@ final class CheckoutController extends Controller
     {
         $address = $resolveAddressAction->handle($request->input('address'));
 
-        $session = $stripeAction->handle( $address->id);
+        $session = $stripeAction->handle($address->id);
 
         return Inertia::location($session->url);
     }
