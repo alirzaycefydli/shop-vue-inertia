@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Orders\SendOrderConfirmationEmail;
 use App\Enums\OrderStatus;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ final class StripeWebhookController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, SendOrderConfirmationEmail $sendOrderConfirmationEmail)
     {
         $endpoint_secret = config('services.stripe.webhook');
 
@@ -49,17 +50,19 @@ final class StripeWebhookController extends Controller
         // Handle the event
         switch ($event->type) {
             case 'checkout.session.completed':
-                $paymentIntent = $event->data->object;
-                $sessionId = $paymentIntent->id;
+                $session = $event->data->object;
 
-                $order = Order::where('session_id', $sessionId)
+                $order = Order::with(['orderItems.product.primaryImage'])
+                    ->where('session_id', $session->id)
                     ->first();
 
                 if ($order && $order->status === OrderStatus::Pending->value) {
                     $order->update([
                         'status' => OrderStatus::Paid->value,
+                        'email' => $session->customer_details->email,
                     ]);
-                    // TODO: Send email to the user
+
+                    $sendOrderConfirmationEmail->handle($order);
                 }
                 break;
         }

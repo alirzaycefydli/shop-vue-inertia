@@ -54,8 +54,8 @@ final class CheckoutSuccessController extends Controller
             $deleteAllGuestCartItems->handle();
         }
 
-        return inertia('Payment/Success',[
-            'orderNumber' => $order->order_number
+        return inertia('Payment/Success', [
+            'orderNumber' => $order->order_number,
         ]);
     }
 }
