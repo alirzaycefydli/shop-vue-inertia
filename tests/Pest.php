@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,7 +18,7 @@ use Tests\TestCase;
 */
 
 pest()->extend(TestCase::class)
-    // ->use(RefreshDatabase::class)
+    ->use(RefreshDatabase::class)
     ->in('Feature');
 
 /*
@@ -46,7 +47,15 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something(): void
+function createTestUser(
+    ?string $email = 'test@example.com', 
+    ?string $password = 'password', 
+    ?bool $remember = null
+): User
 {
-    // ..
+    return User::factory()->create([
+        'email'=> $email,
+        'password' => $password,
+        'remember_token' => $remember,
+    ]);
 }
