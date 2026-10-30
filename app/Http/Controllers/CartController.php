@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Cart\AllCartProducts;
 use App\Actions\Cart\CreateCartItem;
-use App\Actions\Cart\CreateGetGuestUserCartItem;
+use App\Actions\Cart\CreateGuestUserCartItem;
 use App\Actions\Cart\DeleteCartItem;
 use App\Actions\Cart\DeleteGuestCartItem;
 use App\Actions\Cart\GetGuestUserCartItems;
@@ -35,7 +35,7 @@ final class CartController extends Controller
         ]);
     }
 
-    public function store(Product $product, CreateCartItem $action, CreateGetGuestUserCartItem $guestAction): void
+    public function store(Product $product, CreateCartItem $action, CreateGuestUserCartItem $guestAction): void
     {
         if (auth()->user()) {
             $action->handle($product, auth()->user());
