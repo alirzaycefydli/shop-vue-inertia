@@ -6,7 +6,7 @@ namespace App\Actions\Cart;
 
 use App\Models\Product;
 
-final readonly class CreateGetGuestUserCartItem
+final readonly class CreateGuestUserCartItem
 {
     public function handle(Product $product): void
     {
@@ -15,8 +15,10 @@ final readonly class CreateGetGuestUserCartItem
             return $value['product_id'] === $product->id;
         });
 
-        if ($item !== null && $product->stock_quantity > $cart[$item]['quantity']) {
-            $cart[$item]['quantity'] += 1;
+        if ($item !== null) {
+            if ($cart[$item]['quantity'] < $product->stock_quantity) {
+                $cart[$item]['quantity']++;
+            }
         } else {
             $cart[] = [
                 'product_id' => $product->id,
