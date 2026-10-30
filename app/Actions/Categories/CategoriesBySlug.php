@@ -11,7 +11,7 @@ final readonly class CategoriesBySlug
     public function handle(string $slug)
     {
         return Category::where('slug', $slug)
-            ->first()
+            ->firstOrFail()
             ->load('childrenRecursive');
     }
 }
