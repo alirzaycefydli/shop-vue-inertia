@@ -1,16 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\ProductStatus;
 use App\Models\Cart;
 use App\Models\CartItem;
-use App\Models\Product;
-use App\Models\User;
 
 test('can add protuct to the cart', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-    ]);
-    $user = User::factory()->create();
+    $product = createProduct(ProductStatus::Active->value);
+    $user = createTestUser();
 
     $response = $this->actingAs($user)
         ->post(route('cart.store', [
@@ -26,11 +24,8 @@ test('can add protuct to the cart', function () {
 });
 
 test('can increase product quantity', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-        'stock_quantity' => 3,
-    ]);
-    $user = User::factory()->create();
+    $product = createProduct(ProductStatus::Active->value, 3);
+    $user = createTestUser();
 
     $this->actingAs($user)
         ->post(route('cart.store', [
@@ -54,16 +49,13 @@ test('can increase product quantity', function () {
         assertDatabaseHas('cart_items', [
             'product_id' => $product->id,
             'quantity' => 3,
-            'cart_id'=> $userCart->id
+            'cart_id' => $userCart->id,
         ]);
 });
 
 test('can decrease product quantity', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-        'stock_quantity' => 3,
-    ]);
-    $user = User::factory()->create();
+    $product = createProduct(ProductStatus::Active->value, 3);
+    $user = createTestUser();
 
     $this->actingAs($user)
         ->post(route('cart.store', [
@@ -95,16 +87,13 @@ test('can decrease product quantity', function () {
         assertDatabaseHas('cart_items', [
             'product_id' => $product->id,
             'quantity' => 1,
-            'cart_id'=> $userCart->id
+            'cart_id' => $userCart->id,
         ]);
 });
 
 test('can remove a product', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-        'stock_quantity' => 3,
-    ]);
-    $user = User::factory()->create();
+    $product = createProduct(ProductStatus::Active->value, 3);
+    $user = createTestUser();
 
     $this->actingAs($user)
         ->post(route('cart.store', [
@@ -123,11 +112,8 @@ test('can remove a product', function () {
 });
 
 test('cart data belongs to the authenticated user', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-        'stock_quantity' => 3,
-    ]);
-    $user = User::factory()->create();
+    $product = createProduct(ProductStatus::Active->value, 3);
+    $user = createTestUser();
 
     $this->actingAs($user)
         ->post(route('cart.store', [
@@ -142,12 +128,10 @@ test('cart data belongs to the authenticated user', function () {
 });
 
 test('user cannot modify another user`s cart.', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-        'stock_quantity' => 3,
-    ]);
-    $userOne = User::factory()->create();
-    $userTwo = User::factory()->create();
+    $product = createProduct(ProductStatus::Active->value, 3);
+
+    $userOne = createTestUser();
+    $userTwo = createTestUser('test2@example.com');
 
     $this->actingAs($userOne)
         ->post(route('cart.store', [
@@ -174,11 +158,8 @@ test('user cannot modify another user`s cart.', function () {
 });
 
 test('attempt to use an invalid quantity', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-        'stock_quantity' => 3,
-    ]);
-    $user = User::factory()->create();
+    $product = createProduct(ProductStatus::Active->value, 3);
+    $user = createTestUser();
 
     $this->actingAs($user)
         ->post(route('cart.store', [
@@ -198,15 +179,15 @@ test('attempt to use an invalid quantity', function () {
     );
 
     $response->assertOk();
-    $this->assertDatabaseHas('cart_items',[
-        'quantity' => 1
+    $this->assertDatabaseHas('cart_items', [
+        'quantity' => 1,
     ]);
 });
 
-test('attempt to add a nonexistent product', function () { })->todo();
+test('attempt to add a nonexistent product', function () {})->todo();
 
-test('attempt to exceed available stock', function () { })->todo();
+test('attempt to exceed available stock', function () {})->todo();
 
-test('cannot add an inactive product', function () { })->todo();
+test('cannot add an inactive product', function () {})->todo();
 
-test('empty cart returns empty and do not throw errors', function () { })->todo();
+test('empty cart returns empty and do not throw errors', function () {})->todo();

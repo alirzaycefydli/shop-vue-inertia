@@ -1,11 +1,10 @@
 <?php
+
+declare(strict_types=1);
 use App\Enums\ProductStatus;
-use App\Models\Product;
 
 test('can view the active product details', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-    ]);
+    $product = createProduct(ProductStatus::Active->value);
 
     $response = $this->get(route('products.show', $product->slug));
 
@@ -14,9 +13,7 @@ test('can view the active product details', function () {
 });
 
 test('inactive product cannot be viewed', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Inactive->value,
-    ]);
+    $product = createProduct(ProductStatus::Inactive->value);
 
     $response = $this->get(route('products.show', $product->slug));
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Mail\Orders\OrderCreated;
 use App\Models\Order;
 use Illuminate\Support\Facades\Mail;
@@ -28,11 +30,10 @@ test('order is marked as paid after a successful Stripe webhook and order confir
                 'object' => 'checkout.session',
                 'customer_details' => [
                     'email' => 'test@test.com',
-                ]
+                ],
             ],
         ],
     ], JSON_THROW_ON_ERROR);
-
 
     $signature = WebhookSignature::generateSignatureHeader(
         $payload,
@@ -51,9 +52,9 @@ test('order is marked as paid after a successful Stripe webhook and order confir
         ],
         $payload
     );
-    
+
     $response->assertOk();
-    $this->assertDatabaseHas('orders',[
+    $this->assertDatabaseHas('orders', [
         'session_id' => 'cs_test_123',
         'status' => 'paid',
         'email' => 'test@test.com',

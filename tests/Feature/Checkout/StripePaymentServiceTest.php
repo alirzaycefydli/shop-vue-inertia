@@ -1,28 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Services\Stripe\StripePaymentService;
-use Stripe\StripeClient;
-use Stripe\StripeClientInterface;
 use Stripe\Checkout\Session;
 use Stripe\Service\Checkout\CheckoutServiceFactory;
 use Stripe\Service\Checkout\SessionService;
+use Stripe\StripeClient;
+use Stripe\StripeClientInterface;
 
 test('stripe session retrieved', function () {
-    
+
     $session = $this->createMock(Session::class);
 
     $sessionService = $this->createMock(SessionService::class);
-    
+
     $sessionService->expects($this->once())
         ->method('create')
         ->willReturn($session);
-    
+
     $stripeClient = $this->getMockBuilder(StripeClient::class)
         ->disableOriginalConstructor()
         ->onlyMethods(['getService'])
         ->getMock();
 
-    $checkoutFactory = new class($stripeClient, $sessionService) extends CheckoutServiceFactory {
+    $checkoutFactory = new class($stripeClient, $sessionService) extends CheckoutServiceFactory
+    {
         public function __construct(
             StripeClientInterface $client,
             private SessionService $sessionService,
@@ -40,7 +43,6 @@ test('stripe session retrieved', function () {
         }
     };
 
-
     $stripeClient->expects($this->once())
         ->method('getService')
         ->with('checkout')
@@ -54,5 +56,3 @@ test('stripe session retrieved', function () {
 
     expect($result)->toBe($session);
 });
-
-

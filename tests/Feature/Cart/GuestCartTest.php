@@ -1,12 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\ProductStatus;
-use App\Models\Product;
 
 test('can add product to the cart', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-    ]);
+    $product = createProduct(ProductStatus::Active->value);
 
     $response = $this->post(route('cart.store', [
         'product' => $product->slug,
@@ -21,10 +20,7 @@ test('can add product to the cart', function () {
 });
 
 test('can increase product quantity', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-        'stock_quantity' => 3,
-    ]);
+    $product = createProduct(ProductStatus::Active->value, 3);
 
     $this->post(route('cart.store', [
         'product' => $product->slug,
@@ -48,10 +44,7 @@ test('can increase product quantity', function () {
 });
 
 test('can decrease product quantity', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-        'stock_quantity' => 3,
-    ]);
+    $product = createProduct(ProductStatus::Active->value, 3);
 
     foreach (range(1, 3) as $attempt) {
         $this->post(route('cart.store', [
@@ -72,10 +65,7 @@ test('can decrease product quantity', function () {
 });
 
 test('can remove a product', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-        'stock_quantity' => 3,
-    ]);
+    $product = createProduct(ProductStatus::Active->value, 3);
 
     $this->post(route('cart.store', [
         'product' => $product->slug,
@@ -92,10 +82,7 @@ test('can remove a product', function () {
 });
 
 test('attempt to use an invalid quantity', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-        'stock_quantity' => 1,
-    ]);
+    $product = createProduct(ProductStatus::Active->value, 1);
 
     $this->post(route('cart.store', [
         'product' => $product->slug,
@@ -120,10 +107,7 @@ test('attempt to add a nonexistent product', function () {
 });
 
 test('attempt to exceed available stock', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Active->value,
-        'stock_quantity' => 1,
-    ]);
+    $product = createProduct(ProductStatus::Active->value, 1);
 
     $response = [];
     foreach (range(1, 2) as $attempt) {
@@ -140,9 +124,7 @@ test('attempt to exceed available stock', function () {
 });
 
 test('cannot add an inactive product', function () {
-    $product = Product::factory()->create([
-        'status' => ProductStatus::Inactive->value,
-    ]);
+    $product = createProduct(ProductStatus::Inactive->value);
 
     $response = $this->post(route('cart.store', [
         'product' => $product->slug,

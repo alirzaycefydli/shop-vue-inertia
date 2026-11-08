@@ -47,6 +47,7 @@ final class AuthenticateUser
             Hash::check($credentials['password'], $user->password)) {
             return $user;
         }
+
         return null;
     }
 }

@@ -1,7 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\ProductStatus;
-use App\Models\Product;
 
 test('product status has correct values', function () {
     expect(ProductStatus::Active->value)->toBe('active')

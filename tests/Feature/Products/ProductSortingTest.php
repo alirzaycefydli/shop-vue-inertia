@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\ProductStatus;
 use App\Models\Product;
 
-test('invalid sorting option falls back safely', function(){
-    $response = $this->get(route('products.index',[
+test('invalid sorting option falls back safely', function () {
+    $response = $this->get(route('products.index', [
         'sort' => 'non-exist',
     ]));
 
@@ -12,14 +14,9 @@ test('invalid sorting option falls back safely', function(){
         ->assertSessionHasNoErrors();
 });
 
-
 test('active product scope returns only active products', function () {
-    Product::factory()->create([ 
-        'status' => ProductStatus::Active->value, // Active product
-    ]);
-    Product::factory()->create([
-        'status' => ProductStatus::Inactive->value, // Inactive product
-    ]);
+    createProduct(ProductStatus::Active->value); // Active Product
+    createProduct(ProductStatus::Inactive->value); // Inactive Product
 
     $products = Product::all();
 

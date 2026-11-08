@@ -10,9 +10,7 @@ use Stripe\StripeClient;
 
 final class StripePaymentService implements StripePaymentGateway
 {
-
-    public function __construct(private StripeClient $stripe)
-    {}
+    public function __construct(private StripeClient $stripe) {}
 
     public function createCheckoutSession(array $lineItems): Session
     {

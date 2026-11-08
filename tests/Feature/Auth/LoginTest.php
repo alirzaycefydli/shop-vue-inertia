@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 test('guest user can access the login page', function () {
     $this->actingAsGuest()
         ->get(route('login'))
         ->assertOk();
 });
-
 
 test('can login with valid credentials', function () {
     $user = createTestUser();
@@ -14,9 +15,9 @@ test('can login with valid credentials', function () {
         'email' => 'test@example.com',
         'password' => 'password',
     ]);
-    
+
     $this->assertAuthenticatedAs($user);
-    
+
     $response->assertRedirect(route('home'));
 });
 
@@ -44,13 +45,13 @@ test('cannot login with incorrect password', function () {
         ->assertSessionHasErrors('email');
 });
 
-test('cannot login with empty credentials',function(){
+test('cannot login with empty credentials', function () {
     $this->post(route('login.store'))
         ->assertRedirect()
         ->assertSessionHasErrors(['email', 'password']);
 });
 
-test('cannot login with invalid email address',function(){
+test('cannot login with invalid email address', function () {
     $this->post(route('login.store'), [
         'email' => 'test@',
         'password' => 'password',
@@ -60,12 +61,12 @@ test('cannot login with invalid email address',function(){
 });
 
 test('authenticated user visits a guest-only login page and gets redirected', function () {
-$this->actingAs(createTestUser())
+    $this->actingAs(createTestUser())
         ->get(route('login'))
         ->assertRedirect(route('home'));
 });
 
-test('authenticated user can logout', function(){
+test('authenticated user can logout', function () {
     $this->actingAs(createTestUser());
 
     $this->post(route('logout'))
@@ -74,20 +75,20 @@ test('authenticated user can logout', function(){
     $this->assertGuest();
 });
 
-test('unauthenticated user cannot logout', function(){
+test('unauthenticated user cannot logout', function () {
     $this->post(route('logout'))
         ->assertRedirect(route('login'));
 
     $this->assertGuest();
 });
 
-test('remember me checkbox creates remember token',function(){
+test('remember me checkbox creates remember token', function () {
     $user = createTestUser();
 
     $this->post(route('login.store'), [
         'email' => 'test@example.com',
         'password' => 'password',
-        'remember'=> true
+        'remember' => true,
     ]);
 
     $this->assertAuthenticatedAs($user);
@@ -96,7 +97,7 @@ test('remember me checkbox creates remember token',function(){
         ->not()->toBeNull();
 });
 
-test('repeated failed attempts trigger throttle',function(){
+test('repeated failed attempts trigger throttle', function () {
     $user = createTestUser();
 
     foreach (range(1, 5) as $attempt) {
@@ -104,7 +105,7 @@ test('repeated failed attempts trigger throttle',function(){
             'email' => $user->email,
             'password' => 'wrong-password',
         ])->assertRedirect()
-          ->assertSessionHasErrors('email');
+            ->assertSessionHasErrors('email');
     }
 
     $this->post(route('login.store'), [
@@ -115,7 +116,7 @@ test('repeated failed attempts trigger throttle',function(){
     $this->assertGuest();
 });
 
-test('can successfully login after failed attempts',function(){
+test('can successfully login after failed attempts', function () {
     $user = createTestUser();
 
     foreach (range(1, 4) as $attempt) {
@@ -123,7 +124,7 @@ test('can successfully login after failed attempts',function(){
             'email' => $user->email,
             'password' => 'wrong-password',
         ])->assertRedirect()
-          ->assertSessionHasErrors('email');
+            ->assertSessionHasErrors('email');
     }
 
     $this->post(route('login.store'), [
@@ -134,7 +135,7 @@ test('can successfully login after failed attempts',function(){
     $this->assertAuthenticatedAs($user);
 });
 
-test('allows requests again after the rate limit expires', function(){
+test('allows requests again after the rate limit expires', function () {
     $user = createTestUser();
 
     foreach (range(1, 5) as $attempt) {
@@ -142,7 +143,7 @@ test('allows requests again after the rate limit expires', function(){
             'email' => $user->email,
             'password' => 'wrong-password',
         ])->assertRedirect()
-          ->assertSessionHasErrors('email');
+            ->assertSessionHasErrors('email');
     }
 
     $this->post(route('login.store'), [
@@ -156,7 +157,7 @@ test('allows requests again after the rate limit expires', function(){
         'email' => $user->email,
         'password' => 'wrong-password',
     ])->assertRedirect()
-      ->assertSessionHasErrors('email');
+        ->assertSessionHasErrors('email');
 
     $this->assertGuest();
 });

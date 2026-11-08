@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\ProductStatus;
 
 test('guest user can access checkout page', function () {
@@ -9,7 +11,7 @@ test('guest user can access checkout page', function () {
         'product' => $product->slug,
     ]));
     $response = $this->get(route('checkout.index'));
-    
+
     $response->assertOk();
 });
 
@@ -23,7 +25,7 @@ test('authenticated user can access checkout page', function () {
         ]));
     $response = $this->actingAs($user)
         ->get(route('checkout.index'));
-        
+
     $response->assertOk();
 });
 
@@ -35,7 +37,7 @@ test('guest user`s cart contains correct products', function () {
     ]));
     $response = $this->assertGuest()
         ->get(route('checkout.index'));
-    
+
     $response->assertDatabaseHas();
 })->todo();
 
@@ -48,7 +50,7 @@ test('authenticated user`s cart contains correct products', function () {
     ]));
     $this->actingAs($user)
         ->get(route('checkout.index'));
-    
+
     $this->assertDatabaseHas('cart_items', [
         'product_id' => $product->id,
         'quantity' => 1,
@@ -58,7 +60,7 @@ test('authenticated user`s cart contains correct products', function () {
 
 test('guest user cannot checkout with empty cart and redirects to products page', function () {
     $this->get(route('checkout.index'))
-    ->assertRedirect(route('products.index'));
+        ->assertRedirect(route('products.index'));
 });
 
 test('authenticated user cannot checkout with empty cart and redirects to products page', function () {
