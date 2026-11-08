@@ -8,6 +8,7 @@ use App\Actions\Orders\CreateOrderItem;
 use App\Actions\Orders\PrepareOrderItems;
 use App\Enums\ProductStatus;
 use App\Models\Address;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -29,9 +30,9 @@ pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature');
 
-    pest()->extend(TestCase::class)
-        ->use(RefreshDatabase::class)
-        ->in('Unit');
+pest()->extend(TestCase::class)
+    ->use(RefreshDatabase::class)
+    ->in('Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -60,22 +61,20 @@ expect()->extend('toBeOne', function () {
 */
 
 function createTestUser(
-    ?string $email = 'test@example.com', 
-    ?string $password = 'password', 
+    ?string $email = 'test@example.com',
+    ?string $password = 'password',
     ?bool $remember = null
-): User
-{
+): User {
     return User::factory()->create([
-        'email'=> $email,
+        'email' => $email,
         'password' => $password,
         'remember_token' => $remember,
     ]);
 }
 
-
 function createAddress(?User $user = null): Address
 {
-    $action = new CreateAddress();
+    $action = new CreateAddress;
 
     return $action->handle([
         'alias' => 'Test Alias',
@@ -88,12 +87,23 @@ function createAddress(?User $user = null): Address
     ]);
 }
 
-function createProduct(
-    string $productStatus, 
-    ?int $quantity = null, 
-    ?float $price = null
-): Product
+function createProductCategory(?string $parent_id = null): Category
 {
+    $attributes = [];
+
+    if ($parent_id !== null) {
+        $attributes['parent_id'] = $parent_id;
+    }
+
+    return Category::factory()->create($attributes);
+}
+
+function createProduct(
+    string $productStatus,
+    ?int $quantity = null,
+    ?float $price = null,
+    ?string $primary_category_id = null,
+): Product {
     $attributes = [
         'status' => $productStatus,
     ];
@@ -104,21 +114,23 @@ function createProduct(
     if ($price !== null) {
         $attributes['price'] = $price;
     }
+    if ($primary_category_id !== null) {
+        $attributes['primary_category_id'] = $primary_category_id;
+    }
 
     return Product::factory()->create($attributes);
 }
 
-
 function createOrder(array $products = []): Order
 {
-    $orderItems = new CreateOrderItem();
-    $prepareOrderItems = new PrepareOrderItems();
+    $orderItems = new CreateOrderItem;
+    $prepareOrderItems = new PrepareOrderItems;
 
     $order = new CreateOrder($orderItems, $prepareOrderItems);
 
     return $order->handle(
         prepareOrderItems($products ?: [[]]),
-    createAddress()->id,
+        createAddress()->id,
     );
 }
 

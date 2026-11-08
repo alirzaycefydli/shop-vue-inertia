@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Actions\Payments\CreateStripeCheckout;
 use App\Interfaces\StripePaymentGateway;
 use Stripe\Checkout\Session;
 
-test('creates an order and stripe checkout session successfully', function(){
+test('creates an order and stripe checkout session successfully', function () {
 
     $session = new Session([
         'id' => 'cs_test_123',

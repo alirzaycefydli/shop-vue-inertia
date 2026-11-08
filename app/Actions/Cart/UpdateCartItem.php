@@ -10,11 +10,12 @@ final readonly class UpdateCartItem
 {
     public function handle(CartItem $cartItem, int $quantity): bool
     {
-        if($quantity > 0){
+        if ($quantity > 0) {
             return $cartItem->update([
                 'quantity' => $quantity,
             ]);
         }
+
         return false;
     }
 }

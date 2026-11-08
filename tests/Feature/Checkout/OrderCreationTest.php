@@ -1,14 +1,12 @@
 <?php
 
-use App\Actions\Orders\CreateOrder;
-use App\Actions\Orders\CreateOrderItem;
+declare(strict_types=1);
+
 use App\Actions\Orders\PrepareOrderItems;
 use App\Enums\OrderStatus;
 use App\Enums\ProductStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
-
-use function PHPSTORM_META\type;
 
 test('can create order successfully', function () {
     $order = createOrder();
@@ -24,7 +22,7 @@ test('order items created successfully', function () {
     $order = createOrder();
 
     $this->assertDatabaseCount('order_items', 1)
-        ->assertDatabaseHas('order_items',[
+        ->assertDatabaseHas('order_items', [
             'order_id' => $order->id,
         ]);
 });
@@ -37,7 +35,7 @@ test('order items retrieved correctly', function () {
     $orderItems = OrderItem::factory(2)->create([
         'order_id' => $order->id,
     ]);
-    
+
     expect($orderItems->toArray())
         ->toHaveCount(2)
         ->toMatchArray($order->orderItems->toArray());
@@ -48,9 +46,9 @@ test('subtotal price calculated correctly', function () {
         [
             'product' => createProduct(ProductStatus::Active->value, 3, 100.99),
             'quantity' => 2,
-        ]
+        ],
     ];
-    $orderItems = new PrepareOrderItems();
+    $orderItems = new PrepareOrderItems;
     $items = $orderItems->handle($data);
 
     expect($items)

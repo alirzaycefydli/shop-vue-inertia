@@ -1,20 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\ProductStatus;
-use App\Models\Category;
-use App\Models\Product;
 
 test('products can be filtered by category', function () {
-    $categoryOne = Category::factory()->create();
-    $categoryTwo = Category::factory()->create();
-    $productOne = Product::factory()->create([
-        'primary_category_id' => $categoryOne->id, // Product one
-        'status' => ProductStatus::Active->value,
-    ]);
-    Product::factory()->create([
-        'primary_category_id' => $categoryTwo->id, // Product two
-        'status' => ProductStatus::Active->value,
-    ]);
+    $categoryOne = createProductCategory();
+    $categoryTwo = createProductCategory();
+    $productOne = createProduct(ProductStatus::Active->value, null, null, $categoryOne->id); // Product one
+    createProduct(ProductStatus::Active->value, null, null, $categoryTwo->id); // Product two
 
     $response = $this->get(route('categories.index', [
         'category' => $categoryOne->slug,
@@ -29,15 +23,10 @@ test('products can be filtered by category', function () {
         ->and($products[0]['slug'])->toBe($productOne->slug);
 });
 
-test('products in child categories are included', function(){
-    $mainCategory = Category::factory()->create();
-    $subCategory = Category::factory()->create([
-        'parent_id' => $mainCategory->id,
-    ]);
-    Product::factory()->create([
-        'primary_category_id'=> $subCategory->id,
-        'status' => ProductStatus::Active->value,
-    ]);
+test('products in child categories are included', function () {
+    $mainCategory = createProductCategory();
+    $subCategory = createProductCategory($mainCategory->id);
+    createProduct(ProductStatus::Active->value, null, null, $subCategory->id);
 
     $response = $this->get(route('categories.index', [
         'category' => $mainCategory->slug,
@@ -49,7 +38,7 @@ test('products in child categories are included', function(){
     expect($product)->toHaveCount(1);
 });
 
-test('invalid category filter returns 404', function(){
+test('invalid category filter returns 404', function () {
     $response = $this->get(route('categories.index', ['category' => 'non-exist']));
 
     $response->assertNotFound();
