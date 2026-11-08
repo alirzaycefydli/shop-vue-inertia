@@ -21,7 +21,7 @@ final class StripeWebhookController extends Controller
     {
         $endpoint_secret = config('services.stripe.webhook');
 
-        $payload = @file_get_contents('php://input');
+        $payload = $request->getContent();
         $event = null;
 
         try {
@@ -36,7 +36,7 @@ final class StripeWebhookController extends Controller
         if ($endpoint_secret) {
             // Only verify the event if there is an endpoint secret defined
             // Otherwise use the basic decoded event
-            $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
+            $sig_header = $request->header('Stripe-Signature');
             try {
                 $event = Webhook::constructEvent(
                     $payload, $sig_header, $endpoint_secret

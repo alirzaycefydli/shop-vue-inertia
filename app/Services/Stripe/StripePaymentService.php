@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace App\Services\Stripe;
 
+use App\Interfaces\StripePaymentGateway;
 use Stripe\Checkout\Session;
 use Stripe\StripeClient;
 
-final class StripePaymentService
+final class StripePaymentService implements StripePaymentGateway
 {
-    private StripeClient $stripe;
 
-    public function __construct()
-    {
-        $this->stripe = new StripeClient(
-            config('services.stripe.secret')
-        );
-    }
+    public function __construct(private StripeClient $stripe)
+    {}
 
     public function createCheckoutSession(array $lineItems): Session
     {

@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Actions\Addresses\CreateAddress;
+use App\Actions\Orders\CreateOrder;
+use App\Actions\Orders\CreateOrderItem;
+use App\Actions\Orders\PrepareOrderItems;
+use App\Enums\ProductStatus;
+use App\Models\Address;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -62,4 +70,68 @@ function createTestUser(
         'password' => $password,
         'remember_token' => $remember,
     ]);
+}
+
+
+function createAddress(?User $user = null): Address
+{
+    $action = new CreateAddress();
+
+    return $action->handle([
+        'alias' => 'Test Alias',
+        'user_id' => $user?->id,
+        'name' => 'Test',
+        'address' => 'Test Address',
+        'city' => 'Test City',
+        'postal_code' => '00-000',
+        'country' => 'Test Country',
+    ]);
+}
+
+function createProduct(
+    string $productStatus, 
+    ?int $quantity = null, 
+    ?float $price = null
+): Product
+{
+    $attributes = [
+        'status' => $productStatus,
+    ];
+
+    if ($quantity !== null) {
+        $attributes['stock_quantity'] = $quantity;
+    }
+    if ($price !== null) {
+        $attributes['price'] = $price;
+    }
+
+    return Product::factory()->create($attributes);
+}
+
+
+function createOrder(array $products = []): Order
+{
+    $orderItems = new CreateOrderItem();
+    $prepareOrderItems = new PrepareOrderItems();
+
+    $order = new CreateOrder($orderItems, $prepareOrderItems);
+
+    return $order->handle(
+        prepareOrderItems($products ?: [[]]),
+    createAddress()->id,
+    );
+}
+
+function prepareOrderItems(array $products): array
+{
+    return array_map(function (array $item) {
+        return [
+            'product' => createProduct(
+                $item['status'] ?? ProductStatus::Active->value,
+                $item['stock_quantity'] ?? null,
+                $item['price'] ?? null,
+            ),
+            'quantity' => $item['quantity'] ?? 1,
+        ];
+    }, $products);
 }

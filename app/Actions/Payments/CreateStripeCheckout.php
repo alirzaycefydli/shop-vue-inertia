@@ -7,13 +7,13 @@ namespace App\Actions\Payments;
 use App\Actions\Checkout\GetCheckoutItems;
 use App\Actions\Checkout\PrepareStripeLineItems;
 use App\Actions\Orders\CreateOrder;
-use App\Services\Stripe\StripePaymentService;
+use App\Interfaces\StripePaymentGateway;
 use Stripe\Checkout\Session;
 
 final class CreateStripeCheckout
 {
     public function __construct(
-        private StripePaymentService $stripe,
+        private StripePaymentGateway $stripe,
         private CreateOrder $createOrderAction,
         private GetCheckoutItems $getCheckoutItems,
         private PrepareStripeLineItems $prepareStripeLineItems,
