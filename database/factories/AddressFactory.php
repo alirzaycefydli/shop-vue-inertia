@@ -20,7 +20,12 @@ final class AddressFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'alias' => fake()->text(5),
+            'name' => fake()->name(),
+            'address' => fake()->address(),
+            'city' => fake()->city(),
+            'postal_code' => fake()->postcode(),
+            'country' => fake()->country(),
         ];
     }
 }
